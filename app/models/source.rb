@@ -9,7 +9,12 @@ class Source < ActiveRecord::Base
     end
 
     def non_analyzed
-      grouped = group :filename
+      grouped = {}
+
+      group(:filename).each do |key, value|
+        grouped[key] = value
+      end
+
       existing = files
 
       existing = existing.select do |file|
@@ -27,7 +32,8 @@ class Source < ActiveRecord::Base
       results = []
 
       Dir.foreach SOURCE_DIR do |file|
-        next unless File.file? file
+        next unless File.file? File.join(SOURCE_DIR, file)
+        next if file == ".gitkeep"
         results << file
       end
 
