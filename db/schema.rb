@@ -14,14 +14,23 @@
 ActiveRecord::Schema.define(:version => 20110825173040) do
 
   create_table "entries", :force => true do |t|
-    t.string   "source",                      :null => false
+    t.integer  "source_id",                   :null => false
     t.string   "original",     :limit => 512, :null => false
     t.string   "client_ip"
     t.datetime "access_time"
     t.string   "http_request"
     t.integer  "status_code"
+    t.string   "referrer"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "sources", :force => true do |t|
+    t.string   "filename",   :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sources", ["filename"], :name => "index_sources_on_filename", :unique => true
 
 end
