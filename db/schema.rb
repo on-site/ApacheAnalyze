@@ -14,8 +14,9 @@
 ActiveRecord::Schema.define(:version => 20110825173040) do
 
   create_table "entries", :force => true do |t|
-    t.integer  "source_id",                   :null => false
-    t.string   "original",     :limit => 512, :null => false
+    t.integer  "source_id",                                      :null => false
+    t.string   "original",     :limit => 512,                    :null => false
+    t.boolean  "parsed",                      :default => false, :null => false
     t.string   "client_ip"
     t.datetime "access_time"
     t.string   "http_request"

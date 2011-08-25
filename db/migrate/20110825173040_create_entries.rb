@@ -3,6 +3,7 @@ class CreateEntries < ActiveRecord::Migration
     create_table :entries do |t|
       t.integer :source_id, :null => false
       t.string :original, :limit => 512, :null => false
+      t.boolean :parsed, :null => false, :default => false
       t.string :client_ip
       t.datetime :access_time
       t.string :http_request

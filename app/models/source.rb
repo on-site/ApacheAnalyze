@@ -12,7 +12,26 @@ class Source < ActiveRecord::Base
     File.file? path
   end
 
+  def loaded?
+    !non_analyzed
+  end
+
+  def load!
+    File.foreach path do |line|
+      next if line.blank?
+      Entry.create! :source_id => id, :original => line
+    end
+  end
+
   class << self
+    def load!(filename)
+      raise "filename is required!" unless filename.present?
+      raise "filename '#{filename}' is not valid!" unless valid_filename? filename
+      source = Source.create! :filename => filename
+      source.load!
+      source
+    end
+
     # All + all non-analyzed
     def everything
       (all + non_analyzed).sort { |a, b| a.filename <=> b.filename }
@@ -54,6 +73,10 @@ class Source < ActiveRecord::Base
       raw_files.map do |file|
         Source.new :filename => file
       end
+    end
+
+    def valid_filename?(filename)
+      raw_files.include? filename
     end
   end
 end

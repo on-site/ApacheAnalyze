@@ -2,6 +2,8 @@
   <thead>
     <tr>
       <th>Filename</th>
+      <th>File Status</th>
+      <th>Load</th>
     </tr>
   </thead>
 
@@ -9,6 +11,23 @@
     <% @sources.each do |source| %>
       <tr>
         <td><%= source.filename %></td>
+        <td>
+          <% if source.exists? %>
+            <span class="success">exists</span>
+          <% else %>
+            <span class="failure">missing</span>
+          <% end %>
+        </td>
+        <td>
+          <% if source.loaded? %>
+            <span class="success">loaded</span>
+          <% else %>
+            <% form_tag sources_path, :method => :post do %>
+              <input type="hidden" name="filename" value="<%= source.filename %>" />
+              <input type="submit" value="load" />
+            <% end %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </table>
