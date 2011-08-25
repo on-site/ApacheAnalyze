@@ -1,4 +1,6 @@
 Apacheanalyze::Application.routes.draw do
+  resources :entry
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
