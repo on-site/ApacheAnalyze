@@ -1,5 +1,7 @@
 Apacheanalyze::Application.routes.draw do
-  resources :entry
+  resources :entries
+  resources :sources
+  root :to => "sources#index"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
