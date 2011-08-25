@@ -1,6 +1,16 @@
 class Source < ActiveRecord::Base
-  attr_accessor :non_analyzed
   SOURCE_DIR = File.join Rails.root, "analyze"
+
+  attr_accessor :non_analyzed
+  validates_format_of :filename, :with => /^[-_.a-zA-Z0-9]+$/
+
+  def path
+    File.join SOURCE_DIR, filename
+  end
+
+  def exists?
+    File.file? path
+  end
 
   class << self
     # All + all non-analyzed
@@ -28,7 +38,7 @@ class Source < ActiveRecord::Base
       existing
     end
 
-    def files
+    def raw_files
       results = []
 
       Dir.foreach SOURCE_DIR do |file|
@@ -37,7 +47,11 @@ class Source < ActiveRecord::Base
         results << file
       end
 
-      results.map do |file|
+      results
+    end
+
+    def files
+      raw_files.map do |file|
         Source.new :filename => file
       end
     end
