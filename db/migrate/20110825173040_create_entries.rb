@@ -6,9 +6,11 @@ class CreateEntries < ActiveRecord::Migration
       t.boolean :parsed, :null => false, :default => false
       t.string :client_ip
       t.datetime :access_time
+      t.float :duration
       t.string :http_request
       t.integer :status_code
       t.string :referrer
+      t.string :user_agent
 
       t.timestamps
     end

@@ -7,4 +7,9 @@ class SourcesController < ApplicationController
     Source.load! params[:filename]
     redirect_to sources_path
   end
+
+  def parse
+    Source.find(params[:id]).parse!
+    redirect_to sources_path
+  end
 end

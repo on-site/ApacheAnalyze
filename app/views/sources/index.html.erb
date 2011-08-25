@@ -1,3 +1,41 @@
+<% css :src => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" %>
+<% script :src => "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" %>
+<% script :src => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" %>
+
+<% script do %>
+  var originalParsePath;
+
+  $(function() {
+    originalParsePath = $("#parse_dialog form").attr("action");
+    $("#parse_dialog").dialog({ autoOpen: false, width: 600, modal: true });
+
+    $(".parse-button").click(function() {
+      var $this = $(this);
+      $("#parse_dialog form").attr("action", originalParsePath.replace(/SOURCE_ID_HERE/, $this.attr("source_id")));
+      $("#parse_dialog").dialog("open");
+      return false;
+    });
+  });
+<% end %>
+
+<div id="parse_dialog" style="display: none;">
+  <%= form_tag parse_source_path("SOURCE_ID_HERE"), :method => :post do %>
+    <p>
+      Based on apache log pattern:<br />
+      <code><%= Apacheanalyze::DEFAULT_LOG_PATTERN_DESCRIPTION %></code><br />
+      /<input type="text" name="regex" value="<%= Apacheanalyze::DEFAULT_LOG_PATTERN %>" size="50" />/
+    </p>
+
+    <p>
+      <input type="text" name="groups" value="<%= Apacheanalyze::DEFAULT_GROUPS %>" size="50" />
+    </p>
+
+    <p>
+      <input type="submit" value="parse" />
+    </p>
+  <% end %>
+</div>
+
 <table>
   <thead>
     <tr>
@@ -7,6 +45,7 @@
       <th>Entries</th>
       <th>Parsed</th>
       <th>Unparsed</th>
+      <th></th>
     </tr>
   </thead>
 
@@ -33,6 +72,17 @@
         </td>
         <td>
           <%= number_with_delimiter(source.entry_count || "-") %>
+        </td>
+        <td>
+          <%= number_with_delimiter(source.parsed_entry_count || "-") %>
+        </td>
+        <td>
+          <%= number_with_delimiter(source.unparsed_entry_count || "-") %>
+        </td>
+        <td>
+          <% if source.has_more_to_parse? %>
+            <input class="parse-button" type="button" value="parse" source_id="<%= source.id %>" />
+          <% end %>
         </td>
       </tr>
     <% end %>

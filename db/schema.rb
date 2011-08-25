@@ -19,9 +19,11 @@ ActiveRecord::Schema.define(:version => 20110825220356) do
     t.boolean  "parsed",                      :default => false, :null => false
     t.string   "client_ip"
     t.datetime "access_time"
+    t.float    "duration"
     t.string   "http_request"
     t.integer  "status_code"
     t.string   "referrer"
+    t.string   "user_agent"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

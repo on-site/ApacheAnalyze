@@ -39,4 +39,8 @@ module Apacheanalyze
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
   end
+
+  DEFAULT_LOG_PATTERN_DESCRIPTION = "%h %l %u %t %T \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\""
+  DEFAULT_LOG_PATTERN = '(\\S+) \\S+ \\S+ \\[([^\\]]+)\\] (\\S+) "([^"]+)" (\\S+) \\S+ "([^"]+)" "([^"]+)"'
+  DEFAULT_GROUPS = "client_ip, access_time, duration, http_request, status_code, referrer, user_agent"
 end

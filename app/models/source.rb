@@ -2,8 +2,8 @@ class Source < ActiveRecord::Base
   SOURCE_DIR = File.join Rails.root, "analyze"
 
   has_many :entries
-  has_many :parsed_entries, :class_name => "Entry", :conditions => { :parsed => false }
-  has_many :unparsed_entries, :class_name => "Entry", :conditions => { :parsed => true }
+  has_many :parsed_entries, :class_name => "Entry", :conditions => { :parsed => true }
+  has_many :unparsed_entries, :class_name => "Entry", :conditions => { :parsed => false }
   attr_accessor :non_analyzed
   validates_format_of :filename, :with => /^[-_.a-zA-Z0-9]+$/
 
@@ -11,6 +11,22 @@ class Source < ActiveRecord::Base
     if loaded?
       entries.size
     end
+  end
+
+  def parsed_entry_count
+    if loaded?
+      parsed_entries.size
+    end
+  end
+
+  def unparsed_entry_count
+    if loaded?
+      unparsed_entries.size
+    end
+  end
+
+  def has_more_to_parse?
+    loaded? && unparsed_entry_count > 0
   end
 
   def path
@@ -30,6 +46,12 @@ class Source < ActiveRecord::Base
       line.strip!
       next if line.blank?
       Entry.create! :source_id => id, :original => line
+    end
+  end
+
+  def parse!(regex, groups)
+    unparsed_entries.each do |entry|
+      entry.parse! regex, groups
     end
   end
 
