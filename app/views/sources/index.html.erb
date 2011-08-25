@@ -4,6 +4,9 @@
       <th>Filename</th>
       <th>File Status</th>
       <th>Load</th>
+      <th>Entries</th>
+      <th>Parsed</th>
+      <th>Unparsed</th>
     </tr>
   </thead>
 
@@ -22,11 +25,14 @@
           <% if source.loaded? %>
             <span class="success">loaded</span>
           <% else %>
-            <% form_tag sources_path, :method => :post do %>
+            <%= form_tag sources_path, :method => :post do %>
               <input type="hidden" name="filename" value="<%= source.filename %>" />
               <input type="submit" value="load" />
             <% end %>
           <% end %>
+        </td>
+        <td>
+          <%= number_with_delimiter(source.entry_count || "-") %>
         </td>
       </tr>
     <% end %>

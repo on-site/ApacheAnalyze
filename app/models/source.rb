@@ -1,8 +1,17 @@
 class Source < ActiveRecord::Base
   SOURCE_DIR = File.join Rails.root, "analyze"
 
+  has_many :entries
+  has_many :parsed_entries, :class_name => "Entry", :conditions => { :parsed => false }
+  has_many :unparsed_entries, :class_name => "Entry", :conditions => { :parsed => true }
   attr_accessor :non_analyzed
   validates_format_of :filename, :with => /^[-_.a-zA-Z0-9]+$/
+
+  def entry_count
+    if loaded?
+      entries.size
+    end
+  end
 
   def path
     File.join SOURCE_DIR, filename
@@ -18,6 +27,7 @@ class Source < ActiveRecord::Base
 
   def load!
     File.foreach path do |line|
+      line.strip!
       next if line.blank?
       Entry.create! :source_id => id, :original => line
     end
@@ -27,6 +37,8 @@ class Source < ActiveRecord::Base
     def load!(filename)
       raise "filename is required!" unless filename.present?
       raise "filename '#{filename}' is not valid!" unless valid_filename? filename
+      existing = Source.where(:filename => filename).first
+      raise "That source has already been loaded..." if existing
       source = Source.create! :filename => filename
       source.load!
       source
@@ -40,8 +52,8 @@ class Source < ActiveRecord::Base
     def non_analyzed
       grouped = {}
 
-      group(:filename).each do |key, value|
-        grouped[key] = value
+      group(:filename).each do |item|
+        grouped[item.filename] = true
       end
 
       existing = files

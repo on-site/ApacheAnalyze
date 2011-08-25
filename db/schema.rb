@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110825173040) do
+ActiveRecord::Schema.define(:version => 20110825220356) do
 
   create_table "entries", :force => true do |t|
     t.integer  "source_id",                                      :null => false
@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(:version => 20110825173040) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "entries", ["source_id", "parsed"], :name => "index_entries_on_source_id_and_parsed"
 
   create_table "sources", :force => true do |t|
     t.string   "filename",   :null => false
