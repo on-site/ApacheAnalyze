@@ -1,5 +1,5 @@
 class SourcesController < ApplicationController
   def index
-    @sources = Source.all
+    @sources = Source.everything
   end
 end
