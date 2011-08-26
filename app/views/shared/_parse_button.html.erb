@@ -1,0 +1,6 @@
+<% if source.has_more_to_parse? %>
+  <input class="parse-button" type="button" value="parse" source_id="<%= source.id %>" />
+<% end %>
+<% if source.finished_parsing? %>
+  <input class="reparse-button" type="button" value="reparse" source_id="<%= source.id %>" />
+<% end %>

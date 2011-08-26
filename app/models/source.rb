@@ -1,11 +1,12 @@
 class Source < ActiveRecord::Base
   SOURCE_DIR = File.join Rails.root, "analyze"
+  VALID_FILENAME = /^[-_.a-zA-Z0-9]+$/
 
   has_many :entries
   has_many :parsed_entries, :class_name => "Entry", :conditions => { :parsed => true }
   has_many :unparsed_entries, :class_name => "Entry", :conditions => { :parsed => false }
   attr_accessor :non_analyzed
-  validates_format_of :filename, :with => /^[-_.a-zA-Z0-9]+$/
+  validates_format_of :filename, :with => VALID_FILENAME
 
   def example_row
     if non_analyzed
@@ -100,6 +101,23 @@ class Source < ActiveRecord::Base
   end
 
   class << self
+    def upload!(file)
+      filename = file.original_filename
+      filename.gsub! /^.*(\\|\/)/, ""
+      raise "Invalid filename #{filename}" unless filename =~ VALID_FILENAME
+      path = File.join SOURCE_DIR, filename
+      addon = 2
+
+      while File.file? path
+        path = File.join SOURCE_DIR, "#{filename}.#{addon}"
+        addon += 1
+      end
+
+      File.open path, "w" do |f|
+        f.write file.read
+      end
+    end
+
     def load!(filename)
       raise "filename is required!" unless filename.present?
       raise "filename '#{filename}' is not valid!" unless valid_filename? filename
@@ -165,7 +183,7 @@ class Source < ActiveRecord::Base
     end
 
     def valid_filename?(filename)
-      raw_files.include? filename
+      filename =~ VALID_FILENAME && raw_files.include?(filename)
     end
   end
 end

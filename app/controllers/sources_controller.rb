@@ -8,7 +8,12 @@ class SourcesController < ApplicationController
   end
 
   def create
-    Source.load! params[:filename]
+    if params[:filename].present?
+      Source.load! params[:filename]
+    elsif params[:upload_file].present?
+      Source.upload! params[:upload_file]
+    end
+
     redirect_to sources_path
   end
 

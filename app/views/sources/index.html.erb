@@ -1,106 +1,70 @@
-<% css :src => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" %>
-<% script :src => "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" %>
-<% script :src => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" %>
+<% _parsing %>
 
-<% script do %>
-  $(function() {
-    $("#parse_dialog").dialog({ autoOpen: false, width: 600, modal: true });
+<%= form_tag sources_path, :method => :post, :multipart => true do %>
+  <p>
+    <label>
+      Log file:
+      <input type="file" name="upload_file" />
+    </label>
+  </p>
 
-    $(".parse-button").click(function() {
-      var $this = $(this);
-      $("#parse_dialog form").attr("action", $("#parse_source_path").val().replace(/SOURCE_ID_HERE/, $this.attr("source_id")));
-      $("#parse_dialog").dialog("open");
-      return false;
-    });
-
-    $(".reparse-button").click(function() {
-      var $this = $(this);
-      $("#parse_dialog form").attr("action", $("#reparse_source_path").val().replace(/SOURCE_ID_HERE/, $this.attr("source_id")));
-      $("#parse_dialog").dialog("open");
-      return false;
-    });
-  });
+  <p>
+    <input type="submit" value="upload" />
+  </p>
 <% end %>
 
-<input type="hidden" id="parse_source_path" value="<%= parse_source_path "SOURCE_ID_HERE" %>" />
-<input type="hidden" id="reparse_source_path" value="<%= reparse_source_path "SOURCE_ID_HERE" %>" />
-
-<div id="parse_dialog" style="display: none;">
-  <%= form_tag "/error", :method => :post do %>
-    <p>
-      Based on apache log pattern:<br />
-      <code><%= Apacheanalyze::DEFAULT_LOG_PATTERN_DESCRIPTION %></code><br />
-      /<input type="text" name="regex" value="<%= Apacheanalyze::DEFAULT_LOG_PATTERN %>" size="50" />/
-    </p>
-
-    <p>
-      <input type="text" name="groups" value="<%= Apacheanalyze::DEFAULT_GROUPS %>" size="50" />
-    </p>
-
-    <p>
-      <input type="submit" value="parse" />
-    </p>
-  <% end %>
-</div>
-
-<table>
-  <thead>
-    <tr>
-      <th>Filename</th>
-      <th>File Status</th>
-      <th>Load</th>
-      <th>Entries</th>
-      <th>Parsed</th>
-      <th>Unparsed</th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @sources.each do |source| %>
+<p>
+  <table>
+    <thead>
       <tr>
-        <td>
-          <% if source.loaded? %>
-            <a href="<%= source_path source %>"><%= source.filename %></a>
-          <% else %>
-            <a href="<%= "#{source_path -1}?filename=#{source.filename}" %>"><%= source.filename %></a>
-          <% end %>
-        </td>
-        <td>
-          <% if source.exists? %>
-            <span class="success">exists</span>
-          <% else %>
-            <span class="failure">missing</span>
-          <% end %>
-        </td>
-        <td>
-          <% if source.loaded? %>
-            <span class="success">loaded</span>
-          <% else %>
-            <%= form_tag sources_path, :method => :post do %>
-              <input type="hidden" name="filename" value="<%= source.filename %>" />
-              <input type="submit" value="load" />
-            <% end %>
-          <% end %>
-        </td>
-        <td>
-          <%= number_with_delimiter format_nil(source.entry_count) %>
-        </td>
-        <td>
-          <%= number_with_delimiter format_nil(source.parsed_entry_count) %>
-        </td>
-        <td>
-          <%= number_with_delimiter format_nil(source.unparsed_entry_count) %>
-        </td>
-        <td>
-          <% if source.has_more_to_parse? %>
-            <input class="parse-button" type="button" value="parse" source_id="<%= source.id %>" />
-          <% end %>
-          <% if source.finished_parsing? %>
-            <input class="reparse-button" type="button" value="reparse" source_id="<%= source.id %>" />
-          <% end %>
-        </td>
+        <th>Filename</th>
+        <th>File Status</th>
+        <th>Load</th>
+        <th>Entries</th>
+        <th>Parsed</th>
+        <th>Unparsed</th>
+        <th></th>
       </tr>
-    <% end %>
+    </thead>
+
+    <tbody>
+      <% @sources.each do |source| %>
+        <tr>
+          <td>
+            <% if source.loaded? %>
+              <a href="<%= source_path source %>"><%= source.filename %></a>
+            <% else %>
+              <a href="<%= "#{source_path -1}?filename=#{source.filename}" %>"><%= source.filename %></a>
+            <% end %>
+          </td>
+          <td>
+            <% if source.exists? %>
+              <span class="success">exists</span>
+            <% else %>
+              <span class="failure">missing</span>
+            <% end %>
+          </td>
+          <td>
+            <% if source.loaded? %>
+              <span class="success">loaded</span>
+            <% else %>
+              <% _load_button :source => source %>
+            <% end %>
+          </td>
+          <td>
+            <%= number_with_delimiter format_nil(source.entry_count) %>
+          </td>
+          <td>
+            <%= number_with_delimiter format_nil(source.parsed_entry_count) %>
+          </td>
+          <td>
+            <%= number_with_delimiter format_nil(source.unparsed_entry_count) %>
+          </td>
+          <td>
+            <% _parse_button :source => source %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
   </table>
-</table>
+</p>
