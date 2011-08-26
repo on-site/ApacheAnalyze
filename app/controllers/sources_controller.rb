@@ -7,6 +7,13 @@ class SourcesController < ApplicationController
     @sources = Source.everything
   end
 
+  def destroy
+    source = Source.from_file params[:id].to_i, params[:filename]
+    source.delete_file! if params[:delete] == "true"
+    source.drop_data! if params[:drop] == "true"
+    redirect_to sources_path
+  end
+
   def create
     if params[:filename].present?
       Source.load! params[:filename]

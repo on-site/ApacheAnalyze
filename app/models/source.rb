@@ -8,6 +8,14 @@ class Source < ActiveRecord::Base
   attr_accessor :non_analyzed
   validates_format_of :filename, :with => VALID_FILENAME
 
+  def source_path
+    if loaded?
+      Rails.application.routes.url_helpers.source_path self
+    else
+      "#{Rails.application.routes.url_helpers.source_path -1}?filename=#{filename}"
+    end
+  end
+
   def example_row
     if non_analyzed
       File.open path, &:readline
@@ -98,6 +106,15 @@ class Source < ActiveRecord::Base
     to_parse.each do |entry|
       entry.parse! regex, groups, options
     end
+  end
+
+  def delete_file!
+    File.delete path
+  end
+
+  def drop_data!
+    Entry.delete_all :source_id => id
+    destroy
   end
 
   class << self

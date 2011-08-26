@@ -7,21 +7,25 @@
     $("#parse_dialog").dialog({ autoOpen: false, width: 600, modal: true });
 
     $(".parse-button").click(function() {
-      var $this = $(this);
-      $("#parse_dialog form").attr("action", $("#parse_source_path").val().replace(/SOURCE_ID_HERE/, $this.attr("source_id")));
+      $("#parse_dialog form").attr("action", $("#parse_source_path").val().replace(/SOURCE_ID_HERE/, $(this).attr("source_id")));
+      $("#parse_dialog input[name='regex']").val($("#parse_default_pattern").val());
+      $("#parse_dialog input[name='groups']").val($("#parse_default_groups").val());
       $("#parse_dialog").dialog("open");
       return false;
     });
 
     $(".reparse-button").click(function() {
-      var $this = $(this);
-      $("#parse_dialog form").attr("action", $("#reparse_source_path").val().replace(/SOURCE_ID_HERE/, $this.attr("source_id")));
+      $("#parse_dialog form").attr("action", $("#reparse_source_path").val().replace(/SOURCE_ID_HERE/, $(this).attr("source_id")));
+      $("#parse_dialog input[name='regex']").val($("#parse_default_pattern").val());
+      $("#parse_dialog input[name='groups']").val($("#parse_default_groups").val());
       $("#parse_dialog").dialog("open");
       return false;
     });
   });
 <% end %>
 
+<input type="hidden" id="parse_default_pattern" value="<%= Apacheanalyze::DEFAULT_LOG_PATTERN %>" />
+<input type="hidden" id="parse_default_groups" value="<%= Apacheanalyze::DEFAULT_GROUPS %>" />
 <input type="hidden" id="parse_source_path" value="<%= parse_source_path "SOURCE_ID_HERE" %>" />
 <input type="hidden" id="reparse_source_path" value="<%= reparse_source_path "SOURCE_ID_HERE" %>" />
 
@@ -30,11 +34,11 @@
     <p>
       Based on apache log pattern:<br />
       <code><%= Apacheanalyze::DEFAULT_LOG_PATTERN_DESCRIPTION %></code><br />
-      /<input type="text" name="regex" value="<%= Apacheanalyze::DEFAULT_LOG_PATTERN %>" size="50" />/
+      /<input type="text" name="regex" value="" size="50" />/
     </p>
 
     <p>
-      <input type="text" name="groups" value="<%= Apacheanalyze::DEFAULT_GROUPS %>" size="50" />
+      <input type="text" name="groups" value="" size="50" />
     </p>
 
     <p>

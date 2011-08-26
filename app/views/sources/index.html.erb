@@ -1,4 +1,5 @@
 <% _parsing %>
+<% _deleting %>
 
 <%= form_tag sources_path, :method => :post, :multipart => true do %>
   <p>
@@ -24,6 +25,7 @@
         <th>Parsed</th>
         <th>Unparsed</th>
         <th></th>
+        <th></th>
       </tr>
     </thead>
 
@@ -31,11 +33,7 @@
       <% @sources.each do |source| %>
         <tr>
           <td>
-            <% if source.loaded? %>
-              <a href="<%= source_path source %>"><%= source.filename %></a>
-            <% else %>
-              <a href="<%= "#{source_path -1}?filename=#{source.filename}" %>"><%= source.filename %></a>
-            <% end %>
+            <a href="<%= source.source_path %>"><%= source.filename %></a>
           </td>
           <td>
             <% if source.exists? %>
@@ -62,6 +60,9 @@
           </td>
           <td>
             <% _parse_button :source => source %>
+          </td>
+          <td>
+            <% _delete_button :source => source %>
           </td>
         </tr>
       <% end %>

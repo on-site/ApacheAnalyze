@@ -1,0 +1,44 @@
+<% css :src => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" %>
+<% script :src => "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" %>
+<% script :src => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" %>
+
+<% script do %>
+  $(function() {
+    $("#delete_dialog").dialog({ autoOpen: false, modal: true });
+
+    $(".delete-button").click(function() {
+      $("#delete_dialog form").attr("action", $(this).attr("delete_path"));
+      $("#delete_filename").text($(this).attr("delete_filename"));
+      $("#delete_dialog input[name='delete']").removeAttr("checked");
+      $("#delete_dialog input[name='drop']").removeAttr("checked");
+      $("#delete_dialog").dialog("open");
+      return false;
+    });
+  });
+<% end %>
+
+<input type="hidden" id="delete_source_path" value="<%= source_path "SOURCE_ID_HERE" %>" />
+
+<div id="delete_dialog" style="display: none;">
+  <%= form_tag "/error", :method => :delete do %>
+    <b>Delete <span id="delete_filename"></span></b>
+
+    <p>
+      <label>
+        <input type="checkbox" name="delete" value="true" />
+        Delete file
+      </label>
+    </p>
+
+    <p>
+      <label>
+        <input type="checkbox" name="drop" value="true" />
+        Drop data
+      </label>
+    </p>
+
+    <p>
+      <input type="submit" value="delete" />
+    </p>
+  <% end %>
+</div>
