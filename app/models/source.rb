@@ -38,6 +38,10 @@ class Source < ActiveRecord::Base
     loaded? && unparsed_entry_count > 0
   end
 
+  def finished_parsing?
+    loaded? && unparsed_entry_count == 0
+  end
+
   def path
     File.join SOURCE_DIR, filename
   end
@@ -58,14 +62,20 @@ class Source < ActiveRecord::Base
     end
   end
 
-  def parse!(regex, groups)
+  def parse!(regex, groups, options = {})
     raise "regex is required!" if regex.blank?
     raise "groups is required!" if groups.blank?
     regex = Regexp.new regex
-    groups = groups.split(",").map(&:strip)
+    groups = groups.split(",").map(&:strip).map(&:to_sym)
 
-    unparsed_entries.each do |entry|
-      entry.parse! regex, groups
+    if options[:force]
+      to_parse = entries
+    else
+      to_parse = unparsed_entries
+    end
+
+    to_parse.each do |entry|
+      entry.parse! regex, groups, options
     end
   end
 

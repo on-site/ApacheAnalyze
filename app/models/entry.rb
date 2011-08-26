@@ -14,7 +14,7 @@ class Entry < ActiveRecord::Base
 
     groups.each do |group|
       next if group.blank?
-      raise "Invalid group #{group}" unless VALID_GROUPS.include? group.to_sym
+      raise "Invalid group #{group}" unless VALID_GROUPS.include? group
     end
 
     return unless original =~ regex
@@ -29,7 +29,7 @@ class Entry < ActiveRecord::Base
     groups.each_with_index do |group, index|
       next if group.blank?
       value = Regexp.last_match(index + 1)
-      value = DateTime.strptime value, "[%d/%b/%Y:%H:%M:%S %Z]" if group == :access_time
+      value = DateTime.strptime value, "%d/%b/%Y:%H:%M:%S %Z" if group == :access_time
       send "#{group}=", value
     end
 

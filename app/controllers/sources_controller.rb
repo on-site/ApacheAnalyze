@@ -16,4 +16,9 @@ class SourcesController < ApplicationController
     Source.find(params[:id]).parse! params[:regex], params[:groups]
     redirect_to sources_path
   end
+
+  def reparse
+    Source.find(params[:id]).parse! params[:regex], params[:groups], :force => true
+    redirect_to sources_path
+  end
 end

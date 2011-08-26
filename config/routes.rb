@@ -4,6 +4,7 @@ Apacheanalyze::Application.routes.draw do
   resources :sources do
     member do
       post "parse"
+      post "reparse"
     end
   end
 
