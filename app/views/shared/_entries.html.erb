@@ -1,0 +1,39 @@
+<% if values.empty? %>
+  <em>None.</em>
+<% else %>
+  <table>
+    <thead>
+      <tr>
+        <th>Client IP</th>
+        <th>Access Time</th>
+        <th>Duration</th>
+        <th>Method</th>
+        <th>URL</th>
+        <th>Status Code</th>
+        <th>Referrer</th>
+        <th>User Agent</th>
+      </tr>
+    </thead>
+
+    <tbody>
+     <% values.each do |entry| %>
+       <% if entry.parsed %>
+         <tr class="parsed">
+           <td><%= format_nil entry.client_ip %></td>
+           <td><%= format_nil entry.access_time %></td>
+           <td><%= format_nil entry.duration %></td>
+           <td title="<%= entry.http_request %>"><%= format_nil entry.http_method %></td>
+           <td title="<%= entry.http_request %>"><%= format_nil entry.http_url %></td>
+           <td><%= format_nil entry.status_code %></td>
+           <td><%= format_nil entry.referrer %></td>
+           <td><%= format_nil entry.user_agent %></td>
+         </tr>
+       <% else %>
+         <tr class="unparsed">
+           <td colspan="8"><code><%= entry.original %></code></td>
+         </tr>
+       <% end %>
+     <% end %>
+    </tbody>
+  </table>
+<% end %>

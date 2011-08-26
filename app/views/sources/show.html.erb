@@ -1,0 +1,26 @@
+<p>
+  <b>Filename:</b> <%= @source.filename %>
+</p>
+
+<p>
+  <b>Parsed Entries:</b> <%= @source.parsed_entry_count %>
+</p>
+
+<p>
+  <b>Unparsed Entries:</b> <%= @source.unparsed_entry_count %>
+</p>
+
+<p>
+  <b>Example log row:</b><br />
+  <code><%= @source.entries.first.original %></code>
+</p>
+
+<p>
+  <b>10 Example Parsed Entries:</b><br />
+  <% _entries :values => @source.parsed_entries.take(10) %>
+</p>
+
+<p>
+  <b>10 Example Unparsed Entries:</b><br />
+  <% _entries :values => @source.unparsed_entries.take(10) %>
+</p>

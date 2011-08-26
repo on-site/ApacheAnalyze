@@ -2,8 +2,15 @@ class Entry < ActiveRecord::Base
   belongs_to :source
   VALID_GROUPS = [:client_ip, :access_time, :duration, :http_request, :status_code, :referrer, :user_agent].freeze
 
-  def parse!(regex, groups)
-    return if parsed
+  def parse_request!
+    return unless http_request
+    return unless http_request =~ /^(\S+)\s+(\S+)/
+    self.http_method = Regexp.last_match(1).downcase
+    self.http_url = Regexp.last_match 2
+  end
+
+  def parse!(regex, groups, options = {})
+    return if parsed unless options[:force]
 
     groups.each do |group|
       next if group.blank?
@@ -12,11 +19,21 @@ class Entry < ActiveRecord::Base
 
     return unless original =~ regex
 
-    groups.each_with_index do |group, index|
-      next if group.blank?
-      send "#{group}=", Regexp.last_match(index + 1)
+    VALID_GROUPS.each do |group|
+      send "#{group}=", nil
     end
 
+    self.http_method = nil
+    self.http_url = nil
+
+    groups.each_with_index do |group, index|
+      next if group.blank?
+      value = Regexp.last_match(index + 1)
+      value = DateTime.strptime value, "[%d/%b/%Y:%H:%M:%S %Z]" if group == :access_time
+      send "#{group}=", value
+    end
+
+    parse_request!
     self.parsed = true
     save!
   end

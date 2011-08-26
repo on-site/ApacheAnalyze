@@ -1,4 +1,8 @@
 class SourcesController < ApplicationController
+  def show
+    @source = Source.find params[:id]
+  end
+
   def index
     @sources = Source.everything
   end

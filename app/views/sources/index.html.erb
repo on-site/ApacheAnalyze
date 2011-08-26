@@ -52,7 +52,11 @@
   <tbody>
     <% @sources.each do |source| %>
       <tr>
-        <td><%= source.filename %></td>
+        <td>
+          <% if source.loaded? %><a href="<%= source_path source %>"><% end %>
+            <%= source.filename %>
+          <% if source.loaded? %></a><% end %>
+        </td>
         <td>
           <% if source.exists? %>
             <span class="success">exists</span>
@@ -71,13 +75,13 @@
           <% end %>
         </td>
         <td>
-          <%= number_with_delimiter(source.entry_count || "-") %>
+          <%= number_with_delimiter format_nil(source.entry_count) %>
         </td>
         <td>
-          <%= number_with_delimiter(source.parsed_entry_count || "-") %>
+          <%= number_with_delimiter format_nil(source.parsed_entry_count) %>
         </td>
         <td>
-          <%= number_with_delimiter(source.unparsed_entry_count || "-") %>
+          <%= number_with_delimiter format_nil(source.unparsed_entry_count) %>
         </td>
         <td>
           <% if source.has_more_to_parse? %>

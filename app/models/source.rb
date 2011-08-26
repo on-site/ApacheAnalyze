@@ -10,6 +10,15 @@ class Source < ActiveRecord::Base
   def entry_count
     if loaded?
       entries.size
+    else
+      return @_entry_count if @_entry_count
+      @_entry_count = 0
+
+      File.foreach path do |line|
+        @_entry_count += 1 if line.present?
+      end
+
+      @_entry_count
     end
   end
 

@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(:version => 20110825220356) do
     t.datetime "access_time"
     t.float    "duration"
     t.string   "http_request"
+    t.string   "http_method"
+    t.string   "http_url"
     t.integer  "status_code"
     t.string   "referrer"
     t.string   "user_agent"
