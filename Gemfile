@@ -2,6 +2,7 @@ source "http://rubygems.org"
 
 gem "rails"
 gem "script_helpers"
+gem "easy_partials"
 
 # Bundle edge Rails instead:
 # gem "rails", :git => "git://github.com/rails/rails.git"
