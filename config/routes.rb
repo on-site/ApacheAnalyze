@@ -1,5 +1,7 @@
 Apacheanalyze::Application.routes.draw do
   get "analyze" => "analyze#index"
+  post "analyze" => "analyze#load"
+  get "analyze/histogram" => "analyze#histogram"
 
   resources :sources do
     member do
