@@ -1,1 +1,14 @@
-TODO
+<% _raphael %>
+
+<% script do %>
+  $(function() {
+    var r = Raphael("paper", 600, 600);
+    r.g.barchart(20, 20, 560, 560, [<%= @histogram.to_json %>]).hover(function() {
+      this.flag = r.g.popup(this.bar.x, this.bar.y, this.bar.value || "0").insertBefore(this);
+    }, function() {
+      this.flag.animate({opacity: 0}, 300, function() { this.remove(); });
+    });
+  });
+<% end %>
+
+<div id="paper"></div>

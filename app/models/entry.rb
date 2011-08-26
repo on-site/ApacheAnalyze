@@ -37,4 +37,12 @@ class Entry < ActiveRecord::Base
     self.parsed = true
     save!
   end
+
+  class << self
+    def histogram(options)
+      options.date_ranges(100).map do |range|
+        count :conditions => { :access_time => range }
+      end
+    end
+  end
 end
