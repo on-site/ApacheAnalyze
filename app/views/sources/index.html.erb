@@ -60,9 +60,11 @@
     <% @sources.each do |source| %>
       <tr>
         <td>
-          <% if source.loaded? %><a href="<%= source_path source %>"><% end %>
-            <%= source.filename %>
-          <% if source.loaded? %></a><% end %>
+          <% if source.loaded? %>
+            <a href="<%= source_path source %>"><%= source.filename %></a>
+          <% else %>
+            <a href="<%= "#{source_path -1}?filename=#{source.filename}" %>"><%= source.filename %></a>
+          <% end %>
         </td>
         <td>
           <% if source.exists? %>

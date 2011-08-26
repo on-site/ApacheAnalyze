@@ -1,6 +1,6 @@
 class SourcesController < ApplicationController
   def show
-    @source = Source.find params[:id]
+    @source = Source.from_file params[:id].to_i, params[:filename]
   end
 
   def index

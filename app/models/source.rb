@@ -7,6 +7,26 @@ class Source < ActiveRecord::Base
   attr_accessor :non_analyzed
   validates_format_of :filename, :with => /^[-_.a-zA-Z0-9]+$/
 
+  def example_row
+    if non_analyzed
+      File.open path, &:readline
+    elsif entries.present?
+      entries.first.original
+    end
+  end
+
+  def parsed_examples
+    unless non_analyzed
+      parsed_entries.take 10
+    end
+  end
+
+  def unparsed_examples
+    unless non_analyzed
+      unparsed_entries.take 10
+    end
+  end
+
   def entry_count
     if loaded?
       entries.size
@@ -130,6 +150,17 @@ class Source < ActiveRecord::Base
     def files
       raw_files.map do |file|
         Source.new :filename => file
+      end
+    end
+
+    def from_file(id, filename)
+      if id == -1
+        raise "filename '#{filename}' is not valid!" unless valid_filename? filename
+        result = Source.new :filename => filename
+        result.non_analyzed = true
+        result
+      else
+        find id
       end
     end
 
