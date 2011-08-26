@@ -1,5 +1,5 @@
 Apacheanalyze::Application.routes.draw do
-  resources :entries
+  get "analyze" => "analyze#index"
 
   resources :sources do
     member do
@@ -8,7 +8,7 @@ Apacheanalyze::Application.routes.draw do
     end
   end
 
-  root :to => "sources#index"
+  root :to => "sources#index", :via => :get
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

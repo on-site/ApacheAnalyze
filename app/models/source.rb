@@ -118,6 +118,12 @@ class Source < ActiveRecord::Base
   end
 
   class << self
+    def with_parsed
+      all.select do |source|
+        source.parsed_entries.size > 0
+      end
+    end
+
     def upload!(file)
       filename = file.original_filename
       filename.gsub! /^.*(\\|\/)/, ""
