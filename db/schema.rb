@@ -30,7 +30,8 @@ ActiveRecord::Schema.define(:version => 20110825220356) do
     t.datetime "updated_at"
   end
 
-  add_index "entries", ["source_id", "parsed"], :name => "index_entries_on_source_id_and_parsed"
+  add_index "entries", ["access_time"], :name => "index_entries_on_access_time"
+  add_index "entries", ["source_id", "parsed", "access_time"], :name => "index_entries_on_source_id_and_parsed_and_access_time"
 
   create_table "sources", :force => true do |t|
     t.string   "filename",   :null => false

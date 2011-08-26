@@ -41,7 +41,7 @@ class Entry < ActiveRecord::Base
   class << self
     def histogram(options)
       options.date_ranges(100).map do |range|
-        count :conditions => { :access_time => range }
+        count :conditions => { :source_id => options.sources, :parsed => true, :access_time => range }
       end
     end
   end
