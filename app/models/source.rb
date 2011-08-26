@@ -127,6 +127,7 @@ class Source < ActiveRecord::Base
     def upload!(file)
       filename = file.original_filename
       filename.gsub! /^.*(\\|\/)/, ""
+      raise "Invalid filename #{filename}" if filename == "." || filename == ".."
       raise "Invalid filename #{filename}" unless filename =~ VALID_FILENAME
       path = File.join SOURCE_DIR, filename
       addon = 2
@@ -142,7 +143,6 @@ class Source < ActiveRecord::Base
     end
 
     def load!(filename)
-      raise "filename is required!" unless filename.present?
       raise "filename '#{filename}' is not valid!" unless valid_filename? filename
       existing = Source.where(:filename => filename).first
       raise "That source has already been loaded..." if existing
@@ -159,7 +159,7 @@ class Source < ActiveRecord::Base
     def non_analyzed
       grouped = {}
 
-      group(:filename).each do |item|
+      select(:filename).group(:filename).each do |item|
         grouped[item.filename] = true
       end
 
@@ -206,6 +206,7 @@ class Source < ActiveRecord::Base
     end
 
     def valid_filename?(filename)
+      return false if filename == "." || filename == ".."
       filename =~ VALID_FILENAME && raw_files.include?(filename)
     end
   end

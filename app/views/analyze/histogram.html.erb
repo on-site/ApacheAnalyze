@@ -1,14 +1,51 @@
 <% _raphael %>
 
 <% script do %>
+  var PAPER_WIDTH = 1000;
+  var PAPER_HEIGHT = 600;
+  var GRAPH_X = 60;
+  var GRAPH_Y = 60;
+  var GRAPH_WIDTH = 880;
+  var GRAPH_HEIGHT = 520;
+  var graph;
+  var values = <%= @histogram.to_json.html_safe %>;
+  var dates = <%= @options.json_date_ranges.html_safe %>;
+
+  function barIndex(bar) {
+    return $.inArray(bar, graph.bars.items[0]);
+  }
+
+  function tag(bar) {
+    var index = barIndex(bar);
+
+    if (index < 0) {
+      return "Unknown";
+    }
+
+    var range = dates[index];
+    return "" + values[index] + " requests\n" + range[0] + " to\n" + range[1];
+  }
+
   $(function() {
-    var r = Raphael("paper", 600, 600);
-    r.g.barchart(20, 20, 560, 560, [<%= @histogram.to_json %>]).hover(function() {
-      this.flag = r.g.popup(this.bar.x, this.bar.y, this.bar.value || "0").insertBefore(this);
+    var r = Raphael("paper", PAPER_WIDTH, PAPER_HEIGHT);
+    graph = r.g.barchart(GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT, [values]).hover(function() {
+      this.flag = r.g.popup(this.bar.x, this.bar.y, tag(this.bar)).insertBefore(this);
     }, function() {
       this.flag.animate({opacity: 0}, 300, function() { this.remove(); });
+    }).click(function() {
+      var index = barIndex(this.bar);
+
+      if (index < 0) {
+        return;
+      }
     });
   });
 <% end %>
 
 <div id="paper"></div>
+
+<%= form_tag analyze_path, :method => :post, :id => "update_form" do %>
+  <input type="hidden" name="visualization_type" value="histogram" />
+  <input type="hidden" name="date_from" />
+  <input type="hidden" name="date_to" />
+<% end %>

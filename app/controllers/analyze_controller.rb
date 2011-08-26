@@ -5,15 +5,9 @@ class AnalyzeController < ApplicationController
 
   def index
     @all_sources = Source.with_parsed
-
-    if session[:sources]
-      @sources = session[:sources].map &:to_i
-    else
-      @sources = @all_sources.map &:id
-    end
-
-    @min_access_time = session[:date_from] || Entry.minimum(:access_time)
-    @max_access_time = session[:date_to] || Entry.maximum(:access_time)
+    @sources = @all_sources.map &:id
+    @min_access_time = Entry.minimum(:access_time)
+    @max_access_time = Entry.maximum(:access_time)
   end
 
   def histogram
@@ -23,9 +17,12 @@ class AnalyzeController < ApplicationController
   def load
     type = params[:visualization_type].to_sym
     raise "Invalid type #{type}" unless VALID_TYPES.include? type
-    session[:sources] = params[:sources] || []
-    session[:date_from] = params[:date_from]
-    session[:date_to] = params[:date_to]
+    params[:sources] = nil if params[:sources].blank?
+    params[:date_from] = nil if params[:date_from].blank?
+    params[:date_to] = nil if params[:date_to].blank?
+    session[:sources] = params[:sources] || session[:sources] || []
+    session[:date_from] = params[:date_from] || session[:date_from]
+    session[:date_to] = params[:date_to] || session[:date_to]
     redirect_to :action => type
   end
 

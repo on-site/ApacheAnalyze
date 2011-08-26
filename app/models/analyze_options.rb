@@ -1,5 +1,6 @@
 class AnalyzeOptions
-  attr_accessor :sources, :date_from, :date_to
+  attr_accessor :sources, :date_from, :date_to, :histogram_count
+  SHORT_TIME_FORMAT = "%H:%M:%S %m/%d/%y"
 
   def initialize(session)
     self.sources = (session[:sources] || Source.with_parsed.map(&:id)).map(&:to_i)
@@ -15,8 +16,27 @@ class AnalyzeOptions
     else
       self.date_to = Entry.maximum :access_time
     end
+
+    self.histogram_count = 100
   end
 
+  def date_ranges
+    results = []
+
+    step_dates histogram_count do |x, y|
+      results << (x..y)
+    end
+
+    results
+  end
+
+  def json_date_ranges
+    date_ranges.map do |x|
+      [x.begin.strftime(SHORT_TIME_FORMAT), x.end.strftime(SHORT_TIME_FORMAT)]
+    end.to_json
+  end
+
+  private
   def step_dates(count)
     last = nil
     t1 = date_from.to_f
@@ -27,15 +47,5 @@ class AnalyzeOptions
       yield Time.at(last), Time.at(x) if last
       last = x
     end
-  end
-
-  def date_ranges(count)
-    results = []
-
-    step_dates 100 do |x, y|
-      results << (x..y)
-    end
-
-    results
   end
 end
