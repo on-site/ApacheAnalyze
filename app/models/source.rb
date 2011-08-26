@@ -50,6 +50,11 @@ class Source < ActiveRecord::Base
   end
 
   def parse!(regex, groups)
+    raise "regex is required!" if regex.blank?
+    raise "groups is required!" if groups.blank?
+    regex = Regexp.new regex
+    groups = groups.split(",").map(&:strip)
+
     unparsed_entries.each do |entry|
       entry.parse! regex, groups
     end

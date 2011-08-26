@@ -9,7 +9,7 @@ class SourcesController < ApplicationController
   end
 
   def parse
-    Source.find(params[:id]).parse!
+    Source.find(params[:id]).parse! params[:regex], params[:groups]
     redirect_to sources_path
   end
 end
