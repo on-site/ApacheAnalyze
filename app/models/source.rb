@@ -19,7 +19,7 @@ class Source < ActiveRecord::Base
   def example_row
     if non_analyzed
       File.open path, &:readline
-    elsif entries.present?
+    elsif entries.size > 0
       entries.limit(1).first.original
     end
   end
