@@ -11,12 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110825220356) do
+ActiveRecord::Schema.define(:version => 20110829171159) do
 
   create_table "entries", :force => true do |t|
-    t.integer  "source_id",                                      :null => false
-    t.string   "original",     :limit => 512,                    :null => false
-    t.boolean  "parsed",                      :default => false, :null => false
+    t.integer  "source_id",                                           :null => false
+    t.string   "original",          :limit => 512,                    :null => false
+    t.boolean  "parsed",                           :default => false, :null => false
     t.string   "client_ip"
     t.datetime "access_time"
     t.float    "duration"
@@ -28,6 +28,8 @@ ActiveRecord::Schema.define(:version => 20110825220356) do
     t.string   "user_agent"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "http_query_string"
+    t.string   "server_name",       :limit => 64
   end
 
   add_index "entries", ["access_time"], :name => "index_entries_on_access_time"

@@ -9,6 +9,7 @@
         <th>Duration</th>
         <th>Method</th>
         <th>URL</th>
+        <th>Query String</th>
         <th>Status Code</th>
         <th>Referrer</th>
         <th>User Agent</th>
@@ -24,13 +25,14 @@
            <td><%= format_nil entry.duration %></td>
            <td title="<%= entry.http_request %>"><%= format_nil entry.http_method %></td>
            <td title="<%= entry.http_request %>"><%= format_nil entry.http_url %></td>
+           <td title="<%= entry.http_request %>"><%= format_nil entry.http_query_string %></td>
            <td><%= format_nil entry.status_code %></td>
            <td><%= format_nil entry.referrer %></td>
            <td><%= format_nil entry.user_agent %></td>
          </tr>
        <% else %>
          <tr class="unparsed">
-           <td colspan="8"><code><%= entry.original %></code></td>
+           <td colspan="9"><code><%= entry.original %></code></td>
          </tr>
        <% end %>
      <% end %>

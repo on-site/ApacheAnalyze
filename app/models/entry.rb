@@ -1,12 +1,13 @@
 class Entry < ActiveRecord::Base
   belongs_to :source
-  VALID_GROUPS = [:client_ip, :access_time, :duration, :http_request, :status_code, :referrer, :user_agent].freeze
+  VALID_GROUPS = [:client_ip, :access_time, :duration, :http_request, :status_code, :referrer, :user_agent, :server_name].freeze
 
   def parse_request!
     return unless http_request
-    return unless http_request =~ /^(\S+)\s+(\S+)/
+    return unless http_request =~ /^(\S+)\s+(\S+?)(?:\?(\S+))?(?:\s|$)/
     self.http_method = Regexp.last_match(1).downcase
     self.http_url = Regexp.last_match 2
+    self.http_query_string = Regexp.last_match 3
   end
 
   def parse!(regex, groups, options = {})
@@ -25,6 +26,7 @@ class Entry < ActiveRecord::Base
 
     self.http_method = nil
     self.http_url = nil
+    self.http_query_string = nil
 
     groups.each_with_index do |group, index|
       next if group.blank?
