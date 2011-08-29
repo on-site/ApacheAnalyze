@@ -20,19 +20,19 @@ class Source < ActiveRecord::Base
     if non_analyzed
       File.open path, &:readline
     elsif entries.present?
-      entries.first.original
+      entries.limit(1).first.original
     end
   end
 
   def parsed_examples
     unless non_analyzed
-      parsed_entries.take 10
+      parsed_entries.limit(10).all
     end
   end
 
   def unparsed_examples
     unless non_analyzed
-      unparsed_entries.take 10
+      unparsed_entries.limit(10).all
     end
   end
 
