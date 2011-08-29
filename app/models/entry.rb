@@ -10,6 +10,41 @@ class Entry < ActiveRecord::Base
     self.http_query_string = Regexp.last_match 3
   end
 
+  def parse_user_agent!
+    return unless user_agent
+    ua = user_agent.downcase
+
+    if ua.include?("msie") && ua.include?("chrome")
+      type = "Internet Explorer (ChromeFrame)"
+    elsif ua.include? "msie"
+      type = "Internet Explorer"
+    elsif ua.include? "firefox"
+      type = "FireFox"
+    elsif ua.include? "chrome"
+      type = "Chrome"
+    elsif ua.include? "blackberry"
+      type = "Blackberry"
+    elsif ua.include? "opera mini"
+      type = "Opera Mini"
+    elsif ua.include? "opera"
+      type = "Opera"
+    elsif ua.include?("android") && ua.include?("mobile") && ua.include?("safari")
+      type = "Mobile Safari (Android)"
+    elsif ua.include?("iphone") && ua.include?("mobile") && ua.include?("safari")
+      type = "Mobile Safari (iPhone)"
+    elsif ua.include?("ipad") && ua.include?("mobile") && ua.include?("safari")
+      type = "Mobile Safari (iPad)"
+    elsif ua.include?("mobile") && ua.include?("safari")
+      type = "Mobile Safari (Other)"
+    elsif ua.include? "safari"
+      type = "Safari"
+    elsif ua.include? "netscape"
+      type = "Netscape"
+    end
+
+    self.user_agent_type = type || "Unknown"
+  end
+
   def parse!(regex, groups, options = {})
     return if parsed unless options[:force]
 
@@ -27,6 +62,7 @@ class Entry < ActiveRecord::Base
     self.http_method = nil
     self.http_url = nil
     self.http_query_string = nil
+    self.user_agent_type = nil
 
     groups.each_with_index do |group, index|
       next if group.blank?
@@ -36,6 +72,7 @@ class Entry < ActiveRecord::Base
     end
 
     parse_request!
+    parse_user_agent!
     self.parsed = true
     save!
   end

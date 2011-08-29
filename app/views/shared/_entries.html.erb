@@ -28,7 +28,7 @@
            <td title="<%= entry.http_request %>"><%= format_nil entry.http_query_string %></td>
            <td><%= format_nil entry.status_code %></td>
            <td><%= format_nil entry.referrer %></td>
-           <td><%= format_nil entry.user_agent %></td>
+           <td title="<%= entry.user_agent %>"><%= format_nil entry.user_agent_type %></td>
          </tr>
        <% else %>
          <tr class="unparsed">
