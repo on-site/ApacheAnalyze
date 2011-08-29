@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(:version => 20110829222458) do
     t.string   "http_url",          :limit => 1024
     t.string   "http_query_string", :limit => 1024
     t.integer  "status_code"
-    t.string   "referrer"
+    t.string   "referrer",          :limit => 2048
     t.string   "user_agent"
     t.datetime "created_at"
     t.datetime "updated_at"
