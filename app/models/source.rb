@@ -98,13 +98,15 @@ class Source < ActiveRecord::Base
     groups = groups.split(",").map(&:strip).map(&:to_sym)
 
     if options[:force]
-      to_parse = entries
+      conditions = { :source_id => id }
     else
-      to_parse = unparsed_entries
+      conditions = { :source_id => id, :parsed => false }
     end
 
-    to_parse.each do |entry|
-      entry.parse! regex, groups, options
+    Entry.where(conditions).find_in_batches do |values|
+      values.each do |entry|
+        entry.parse! regex, groups, options
+      end
     end
   end
 
