@@ -14,22 +14,22 @@
 ActiveRecord::Schema.define(:version => 20110829222458) do
 
   create_table "entries", :force => true do |t|
-    t.integer  "source_id",                                           :null => false
-    t.string   "original",          :limit => 512,                    :null => false
-    t.boolean  "parsed",                           :default => false, :null => false
+    t.integer  "source_id",                                            :null => false
+    t.string   "original",          :limit => 2048,                    :null => false
+    t.boolean  "parsed",                            :default => false, :null => false
+    t.string   "server_name",       :limit => 64
     t.string   "client_ip"
     t.datetime "access_time"
     t.float    "duration"
-    t.string   "http_request"
+    t.string   "http_request",      :limit => 2048
     t.string   "http_method"
-    t.string   "http_url"
+    t.string   "http_url",          :limit => 1024
+    t.string   "http_query_string", :limit => 1024
     t.integer  "status_code"
     t.string   "referrer"
     t.string   "user_agent"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "http_query_string"
-    t.string   "server_name",       :limit => 64
     t.string   "user_agent_type"
   end
 
