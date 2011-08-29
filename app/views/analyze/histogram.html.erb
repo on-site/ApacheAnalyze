@@ -10,6 +10,7 @@
   var graph;
   var values = <%= @histogram.to_json.html_safe %>;
   var dates = <%= @options.json_date_ranges.html_safe %>;
+  var fullDates = <%= @options.json_full_date_ranges.html_safe %>;
 
   function barIndex(bar) {
     return $.inArray(bar, graph.bars.items[0]);
@@ -38,6 +39,10 @@
       if (index < 0) {
         return;
       }
+
+      $("#update_form input[name='date_from']").val(fullDates[index][0]);
+      $("#update_form input[name='date_to']").val(fullDates[index][1]);
+      $("#update_form").submit();
     });
   });
 <% end %>

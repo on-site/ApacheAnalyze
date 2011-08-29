@@ -36,6 +36,12 @@ class AnalyzeOptions
     end.to_json
   end
 
+  def json_full_date_ranges
+    date_ranges.map do |x|
+      [x.begin.to_s, x.end.to_s]
+    end.to_json
+  end
+
   private
   def step_dates(count)
     last = nil
