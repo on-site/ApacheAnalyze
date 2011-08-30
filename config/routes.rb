@@ -6,6 +6,13 @@ Apacheanalyze::Application.routes.draw do
     get "analyze/#{type}" => "analyze##{type}"
   end
 
+  resources :admin do
+    collection do
+      post :pull
+      post :restart
+    end
+  end
+
   resources :sources do
     member do
       post "parse"

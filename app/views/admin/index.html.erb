@@ -1,0 +1,15 @@
+<div>
+  <%= flash[:message] %>
+</div>
+
+<p>
+  <%= form_tag "/admin/restart" do %>
+    <input type="submit" value="Restart Passenger" />
+  <% end %>
+</p>
+
+<p>
+  <%= form_tag "/admin/pull" do %>
+    <input type="submit" value="Git Pull" />
+  <% end %>
+</p>
