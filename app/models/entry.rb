@@ -78,6 +78,12 @@ class Entry < ActiveRecord::Base
   end
 
   class << self
+    def max_duration_histogram(options)
+      options.date_ranges.map do |range|
+        Entry.where(:source_id => options.sources, :parsed => true, :access_time => range).maximum(:duration) || 0
+      end
+    end
+
     def request_histogram(options)
       options.date_ranges.map do |range|
         count :conditions => { :source_id => options.sources, :parsed => true, :access_time => range }

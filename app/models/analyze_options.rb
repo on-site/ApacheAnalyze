@@ -17,6 +17,7 @@ class AnalyzeOptions
       self.date_to = Entry.maximum :access_time
     end
 
+    self.date_to = self.date_to + 1.second if self.date_to == self.date_from
     self.histogram_count = 100
   end
 
@@ -31,6 +32,7 @@ class AnalyzeOptions
       results << (x...y)
     end
 
+    results[-1] = results[-1].begin..results[-1].end
     results
   end
 
@@ -52,6 +54,7 @@ class AnalyzeOptions
     t1 = date_from.to_f
     t2 = date_to.to_f
     step_value = (t2 - t1) / count.to_f
+    step_value = 1.0 if step_value.zero?
 
     (t1..t2).step step_value do |x|
       yield Time.at(last), Time.at(x) if last

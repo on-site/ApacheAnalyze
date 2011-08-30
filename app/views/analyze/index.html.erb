@@ -24,8 +24,9 @@
   <p>
     <b>Visualization Type:</b>
     <select name="visualization_type">
-      <option value="request_histogram">Request Histogram</option>
-      <option value="url_histogram">URL Histogram</option>
+      <% AnalyzeController::VALID_TYPE_VALUES.each do |key, value| %>
+        <option value="<%= key %>"><%= value %></option>
+      <% end %>
     </select>
   </p>
 
