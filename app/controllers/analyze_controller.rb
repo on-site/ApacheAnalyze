@@ -37,6 +37,7 @@ class AnalyzeController < ApplicationController
     session[:sources] = params[:sources] || session[:sources] || []
     session[:date_from] = params[:date_from] || session[:date_from]
     session[:date_to] = params[:date_to] || session[:date_to]
+    session[:histogram_detail] = params[:histogram_detail] || session[:histogram_detail]
     redirect_to :action => type
   end
 

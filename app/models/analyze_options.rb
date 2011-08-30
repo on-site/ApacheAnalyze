@@ -18,7 +18,7 @@ class AnalyzeOptions
     end
 
     self.date_to = self.date_to + 1.second if self.date_to == self.date_from
-    self.histogram_count = 100
+    self.histogram_count = session[:histogram_detail] || 100
   end
 
   def date_range
