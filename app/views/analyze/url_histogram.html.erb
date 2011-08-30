@@ -13,7 +13,7 @@
         <td><%= item.http_url %></td>
         <td><%= number_with_delimiter item.url_count %></td>
         <td>
-          <span style="width: <%= (item.url_count / @max_value) * 400.0 %>px; background-color: green; display: inline-block;">&nbsp;</span>
+          <span style="width: <%= (item.url_count.to_i / @max_value) * 400.0 %>px; background-color: green; display: inline-block;">&nbsp;</span>
         </td>
       </tr>
     <% end %>
