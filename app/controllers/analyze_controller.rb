@@ -1,5 +1,6 @@
 class AnalyzeController < ApplicationController
   VALID_TYPE_VALUES = {
+    :average_duration_histogram => "Average Duration Histogram",
     :max_duration_histogram => "Max Duration Histogram",
     :request_histogram => "Request Histogram",
     :url_histogram => "URL Histogram"
@@ -13,6 +14,10 @@ class AnalyzeController < ApplicationController
     @sources = @all_sources.map &:id
     @min_access_time = Entry.minimum(:access_time)
     @max_access_time = Entry.maximum(:access_time)
+  end
+
+  def average_duration_histogram
+    @histogram = Entry.average_duration_histogram @options
   end
 
   def max_duration_histogram
