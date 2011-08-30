@@ -84,10 +84,10 @@ class Source < ActiveRecord::Base
   end
 
   def load!
-    File.foreach path do |line|
-      line.strip!
-      next if line.blank?
-      Entry.create! :source_id => id, :original => line
+    if connection.adapter_name == "SQLite"
+      load_sqlite!
+    else
+      load_other!
     end
   end
 
@@ -210,6 +210,45 @@ class Source < ActiveRecord::Base
     def valid_filename?(filename)
       return false if filename == "." || filename == ".."
       filename =~ VALID_FILENAME && raw_files.include?(filename)
+    end
+  end
+
+  private
+  # Iterate over each n stripped lines in the file defined by path.
+  def each_path_slice(n)
+    temp = []
+    File.foreach path do |line|
+      line.strip!
+      temp << line unless line.blank?
+
+      if temp.length >= n
+        yield temp
+        temp.clear
+      end
+    end
+
+    yield temp unless temp.empty?
+  end
+
+  def load_sqlite!
+    now = connection.quote DateTime.now
+    each_path_slice 250 do |lines|
+      values = lines.map do |line|
+        "SELECT #{id} AS source_id, #{connection.quote line} AS original, #{now} AS created_at, #{now} AS updated_at"
+      end.join " UNION "
+
+      connection.execute "INSERT INTO entries(source_id, original, created_at, updated_at) #{values}"
+    end
+  end
+
+  def load_other!
+    now = connection.quote DateTime.now
+    each_path_slice 1000 do |lines|
+      values = lines.map do |line|
+        "(#{id}, #{connection.quote line}, #{now}, #{now})"
+      end.join ","
+
+      connection.execute "INSERT INTO entries(source_id, original, created_at, updated_at) VALUES #{values}"
     end
   end
 end
