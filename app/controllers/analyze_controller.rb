@@ -1,5 +1,5 @@
 class AnalyzeController < ApplicationController
-  VALID_TYPES = [:histogram]
+  VALID_TYPES = [:request_histogram, :url_histogram]
 
   before_filter :prepare_options, :only => VALID_TYPES
 
@@ -10,8 +10,13 @@ class AnalyzeController < ApplicationController
     @max_access_time = Entry.maximum(:access_time)
   end
 
-  def histogram
-    @histogram = Entry.histogram @options
+  def url_histogram
+    @histogram = Entry.url_histogram @options
+    @max_value = @histogram.first.url_count.to_f
+  end
+
+  def request_histogram
+    @histogram = Entry.request_histogram @options
   end
 
   def load

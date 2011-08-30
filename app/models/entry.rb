@@ -78,10 +78,14 @@ class Entry < ActiveRecord::Base
   end
 
   class << self
-    def histogram(options)
+    def request_histogram(options)
       options.date_ranges.map do |range|
         count :conditions => { :source_id => options.sources, :parsed => true, :access_time => range }
       end
+    end
+
+    def url_histogram(options)
+      select([:http_url, "count(*) AS url_count"]).where(:source_id => options.sources, :parsed => true, :access_time => options.date_range).group(:http_url).order("url_count DESC").limit(250)
     end
   end
 end

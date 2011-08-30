@@ -20,11 +20,15 @@ class AnalyzeOptions
     self.histogram_count = 100
   end
 
+  def date_range
+    date_from..date_to
+  end
+
   def date_ranges
     results = []
 
     step_dates histogram_count do |x, y|
-      results << (x..y)
+      results << (x...y)
     end
 
     results

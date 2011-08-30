@@ -1,7 +1,10 @@
 Apacheanalyze::Application.routes.draw do
   get "analyze" => "analyze#index"
   post "analyze" => "analyze#load"
-  get "analyze/histogram" => "analyze#histogram"
+
+  AnalyzeController::VALID_TYPES.each do |type|
+    get "analyze/#{type}" => "analyze##{type}"
+  end
 
   resources :sources do
     member do
