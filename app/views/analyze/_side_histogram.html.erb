@@ -1,0 +1,21 @@
+<table>
+  <thead>
+    <tr>
+      <th><%= key_label %></th>
+      <th><%= value_label %></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @histogram.each do |item| %>
+      <tr>
+        <td><%= item.key_id %></td>
+        <td><%= number_with_delimiter item.value_id %></td>
+        <td>
+          <span style="width: <%= (item.value_id.to_f / @max_value) * 400.0 %>px; background-color: green; display: inline-block;">&nbsp;</span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
