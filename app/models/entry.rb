@@ -44,19 +44,19 @@ class Entry < ActiveRecord::Base
     end
 
     def url_average_duration_histogram(options)
-      select(["http_url AS key_id", "avg(duration) AS value_id", "count(*) AS hits_id"]).where(:source_id => options.sources, :parsed => true, :access_time => options.date_range).group(:http_url).order("value_id DESC").limit(250)
+      select(["http_url AS key_id", "avg(duration) AS value_id", "count(*) AS hits_id"]).where(:source_id => options.sources, :parsed => true, :access_time => options.date_range).group(:http_url).order("value_id DESC").limit(options.histogram_count)
     end
 
     def url_max_duration_histogram(options)
-      select(["http_url AS key_id", "max(duration) AS value_id", "count(*) AS hits_id"]).where(:source_id => options.sources, :parsed => true, :access_time => options.date_range).group(:http_url).order("value_id DESC").limit(250)
+      select(["http_url AS key_id", "max(duration) AS value_id", "count(*) AS hits_id"]).where(:source_id => options.sources, :parsed => true, :access_time => options.date_range).group(:http_url).order("value_id DESC").limit(options.histogram_count)
     end
 
     def url_total_duration_histogram(options)
-      select(["http_url AS key_id", "sum(duration) AS value_id", "count(*) AS hits_id"]).where(:source_id => options.sources, :parsed => true, :access_time => options.date_range).group(:http_url).order("value_id DESC").limit(250)
+      select(["http_url AS key_id", "sum(duration) AS value_id", "count(*) AS hits_id"]).where(:source_id => options.sources, :parsed => true, :access_time => options.date_range).group(:http_url).order("value_id DESC").limit(options.histogram_count)
     end
 
     def url_histogram(options)
-      select(["http_url AS key_id", "count(*) AS value_id"]).where(:source_id => options.sources, :parsed => true, :access_time => options.date_range).group(:http_url).order("value_id DESC").limit(250)
+      select(["http_url AS key_id", "count(*) AS value_id"]).where(:source_id => options.sources, :parsed => true, :access_time => options.date_range).group(:http_url).order("value_id DESC").limit(options.histogram_count)
     end
 
     def parse!(source, line, regex, groups)

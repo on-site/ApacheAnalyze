@@ -16,9 +16,9 @@
       <tr>
         <td><%= item.key_id %></td>
         <% if use_hits %>
-          <td><%= number_with_delimiter item.hits_id %></td>
+          <td align="right"><%= number_with_delimiter item.hits_id %></td>
         <% end %>
-        <td><%= number_with_delimiter item.value_id %></td>
+        <td align="right"><%= number_with_delimiter item.value_id %></td>
         <td>
           <span style="width: <%= (item.value_id.to_f / @max_value) * 400.0 %>px; background-color: green; display: inline-block;">&nbsp;</span>
         </td>
