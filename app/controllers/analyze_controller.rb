@@ -11,10 +11,9 @@ class AnalyzeController < ApplicationController
   VALID_TYPES = VALID_TYPE_VALUES.keys
 
   before_filter :prepare_options, :only => VALID_TYPES
+  before_filter :prepare_sources, :except => [:load]
 
   def index
-    @all_sources = Source.with_parsed
-    @sources = @all_sources.map &:id
     @min_access_time = Entry.minimum(:access_time)
     @max_access_time = Entry.maximum(:access_time)
   end
@@ -58,6 +57,10 @@ class AnalyzeController < ApplicationController
   end
 
   private
+  def prepare_sources
+    @all_sources = Source.with_parsed
+  end
+
   def prepare_options
     @options = AnalyzeOptions.new params
   end

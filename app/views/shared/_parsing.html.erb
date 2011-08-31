@@ -34,6 +34,7 @@
       var filename = $(this).attr("source_filename");
       return openDialog($("#load_and_parse_path").val(), function() {
         $("#parse_option").show();
+        $("#parse_dialog input[name='parse']").attr("checked", "checked");
         $("#parse_dialog input[name='filename']").val(filename);
       });
     });

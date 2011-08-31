@@ -3,12 +3,12 @@
 
   <p>
     <b>Sources:</b><br />
-    <% if @sources.blank? %>
+    <% if @all_sources.blank? %>
       <em>None parsed yet</em>
     <% else %>
       <% @all_sources.each do |source| %>
         <label>
-          <input type="checkbox" name="sources[]" value="<%= source.id %>" <%= 'checked="checked"'.html_safe if @sources.include? source.id %> />
+          <input type="checkbox" name="sources[]" value="<%= source.id %>" checked="checked" />
           <%= source.filename %>
         </label>
       <% end %>

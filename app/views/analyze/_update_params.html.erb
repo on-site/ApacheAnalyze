@@ -1,0 +1,39 @@
+<%= form_tag analyze_path, :method => :post, :id => "update_form" do %>
+  <p>
+    <b>Sources:</b><br />
+    <% if @all_sources.blank? %>
+      <em>None parsed yet</em>
+    <% else %>
+      <% @all_sources.each do |source| %>
+        <label>
+          <input type="checkbox" name="sources[]" value="<%= source.id %>" <%= 'checked="checked"'.html_safe if params[:sources].include? source.id.to_s %> />
+          <%= source.filename %>
+        </label>
+      <% end %>
+    <% end %>
+  </p>
+
+  <p>
+    <b>Date range:</b><br/>
+    <input type="text" name="date_from" value="<%= params[:date_from] %>" /><br />
+    <input type="text" name="date_to" value="<%= params[:date_to] %>" />
+  </p>
+
+  <p>
+    <b>Histogram detail:</b>
+    <input type="text" name="histogram_detail" value="<%= params[:histogram_detail] %>" />
+  </p>
+
+  <p>
+    <b>Visualization Type:</b>
+    <select name="visualization_type">
+      <% AnalyzeController::VALID_TYPE_VALUES.each do |key, value| %>
+        <option value="<%= key %>" <%= 'selected="selected"'.html_safe if params[:action].to_sym == key %>><%= value %></option>
+      <% end %>
+    </select>
+  </p>
+
+  <p>
+    <input type="submit" value="load" />
+  </p>
+<% end %>
