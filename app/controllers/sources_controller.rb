@@ -16,7 +16,14 @@ class SourcesController < ApplicationController
 
   def create
     if params[:filename].present?
-      Source.load! params[:filename]
+      options = {}
+
+      if params[:parse] == "true"
+        options[:regex] = params[:regex] || ""
+        options[:groups] = params[:groups] || ""
+      end
+
+      Source.load! params[:filename], options
     elsif params[:upload_file].present?
       Source.upload! params[:upload_file]
     end

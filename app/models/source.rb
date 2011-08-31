@@ -86,8 +86,23 @@ class Source < ActiveRecord::Base
   def load!(options = {})
     inserter = BulkInserter.new(Entry)
 
-    if options[:parse]
-      # TODO....
+    if options[:regex] && options[:groups]
+      raise "regex is required!" if options[:regex].blank?
+      raise "groups is required!" if options[:groups].blank?
+      columns = Entry::PARSED_COLUMNS
+      regex = Regexp.new options[:regex]
+      groups = options[:groups].split(",").map(&:strip).map(&:to_sym)
+
+      each_path_slice inserter.bulk_size do |lines|
+        lines = lines.map do |line|
+          result = Entry.parse! self, line, regex, groups
+          columns.map do |column|
+            result[column]
+          end
+        end
+
+        inserter.create columns, lines
+      end
     else
       each_path_slice inserter.bulk_size do |lines|
         lines = lines.map do |line|
@@ -152,12 +167,12 @@ class Source < ActiveRecord::Base
       end
     end
 
-    def load!(filename)
+    def load!(filename, options = {})
       raise "filename '#{filename}' is not valid!" unless valid_filename? filename
       existing = Source.where(:filename => filename).first
       raise "That source has already been loaded..." if existing
       source = Source.create! :filename => filename
-      source.load!
+      source.load! options
       source
     end
 

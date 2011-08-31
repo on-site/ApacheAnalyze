@@ -1,6 +1,3 @@
 <% unless source.loaded? %>
-  <%= form_tag sources_path, :method => :post do %>
-    <input type="hidden" name="filename" value="<%= source.filename %>" />
-    <input type="submit" value="load" />
-  <% end %>
+  <input class="load-and-parse-button" type="button" value="load" source_filename="<%= source.filename %>" />
 <% end %>

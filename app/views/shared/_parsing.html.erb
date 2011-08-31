@@ -4,22 +4,38 @@
 
 <% script do %>
   $(function() {
+    var openDialog = function(url, callback) {
+      $("#parse_dialog form").attr("action", url);
+      $("#parse_option").hide();
+      $("#parse_dialog input[name='parse']").removeAttr("checked");
+      $("#parse_dialog input[name='regex']").val($("#parse_default_pattern").val());
+      $("#parse_dialog input[name='groups']").val($("#parse_default_groups").val());
+      $("#parse_dialog input[name='filename']").val("");
+
+      if (callback) {
+        callback();
+      }
+
+      $("#parse_dialog").dialog("open");
+      return false;
+    };
+
     $("#parse_dialog").dialog({ autoOpen: false, width: 600, modal: true });
 
     $(".parse-button").click(function() {
-      $("#parse_dialog form").attr("action", $("#parse_source_path").val().replace(/SOURCE_ID_HERE/, $(this).attr("source_id")));
-      $("#parse_dialog input[name='regex']").val($("#parse_default_pattern").val());
-      $("#parse_dialog input[name='groups']").val($("#parse_default_groups").val());
-      $("#parse_dialog").dialog("open");
-      return false;
+      return openDialog($("#parse_source_path").val().replace(/SOURCE_ID_HERE/, $(this).attr("source_id")));
     });
 
     $(".reparse-button").click(function() {
-      $("#parse_dialog form").attr("action", $("#reparse_source_path").val().replace(/SOURCE_ID_HERE/, $(this).attr("source_id")));
-      $("#parse_dialog input[name='regex']").val($("#parse_default_pattern").val());
-      $("#parse_dialog input[name='groups']").val($("#parse_default_groups").val());
-      $("#parse_dialog").dialog("open");
-      return false;
+      return openDialog($("#reparse_source_path").val().replace(/SOURCE_ID_HERE/, $(this).attr("source_id")));
+    });
+
+    $(".load-and-parse-button").click(function() {
+      var filename = $(this).attr("source_filename");
+      return openDialog($("#load_and_parse_path").val(), function() {
+        $("#parse_option").show();
+        $("#parse_dialog input[name='filename']").val(filename);
+      });
     });
   });
 <% end %>
@@ -28,9 +44,19 @@
 <input type="hidden" id="parse_default_groups" value="<%= Apacheanalyze::DEFAULT_GROUPS %>" />
 <input type="hidden" id="parse_source_path" value="<%= parse_source_path "SOURCE_ID_HERE" %>" />
 <input type="hidden" id="reparse_source_path" value="<%= reparse_source_path "SOURCE_ID_HERE" %>" />
+<input type="hidden" id="load_and_parse_path" value="<%= sources_path %>" />
 
 <div id="parse_dialog" style="display: none;">
   <%= form_tag "/error", :method => :post do %>
+    <input type="hidden" name="filename" />
+
+    <p id="parse_option">
+      <label>
+        <input type="checkbox" name="parse" value="true" />
+        Parse the data
+      </label>
+    </p>
+
     <p>
       Based on apache log pattern:<br />
       <code><%= Apacheanalyze::DEFAULT_LOG_PATTERN_DESCRIPTION %></code><br />
