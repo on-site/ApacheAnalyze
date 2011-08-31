@@ -97,7 +97,11 @@ class Source < ActiveRecord::Base
         lines = lines.map do |line|
           result = Entry.parse! self, line, regex, groups
           columns.map do |column|
-            result[column]
+            if column == :created_at || column == :updated_at
+              :now
+            else
+              result[column]
+            end
           end
         end
 
