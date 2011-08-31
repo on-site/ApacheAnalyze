@@ -83,11 +83,19 @@ class Source < ActiveRecord::Base
     !non_analyzed
   end
 
-  def load!
-    if connection.adapter_name == "SQLite"
-      load_sqlite!
+  def load!(options = {})
+    inserter = BulkInserter.new(Entry)
+
+    if options[:parse]
+      # TODO....
     else
-      load_other!
+      each_path_slice inserter.bulk_size do |lines|
+        lines = lines.map do |line|
+          [id, line, :now, :now]
+        end
+
+        inserter.create [:source_id, :original, :created_at, :updated_at], lines
+      end
     end
   end
 
@@ -228,27 +236,5 @@ class Source < ActiveRecord::Base
     end
 
     yield temp unless temp.empty?
-  end
-
-  def load_sqlite!
-    now = connection.quote DateTime.now
-    each_path_slice 250 do |lines|
-      values = lines.map do |line|
-        "SELECT #{id} AS source_id, #{connection.quote line} AS original, #{now} AS created_at, #{now} AS updated_at"
-      end.join " UNION "
-
-      connection.execute "INSERT INTO entries(source_id, original, created_at, updated_at) #{values}"
-    end
-  end
-
-  def load_other!
-    now = connection.quote DateTime.now
-    each_path_slice 1000 do |lines|
-      values = lines.map do |line|
-        "(#{id}, #{connection.quote line}, #{now}, #{now})"
-      end.join ","
-
-      connection.execute "INSERT INTO entries(source_id, original, created_at, updated_at) VALUES #{values}"
-    end
   end
 end
