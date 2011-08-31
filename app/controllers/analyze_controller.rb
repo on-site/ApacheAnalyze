@@ -54,18 +54,11 @@ class AnalyzeController < ApplicationController
   def load
     type = params[:visualization_type].to_sym
     raise "Invalid type #{type}" unless VALID_TYPES.include? type
-    params[:sources] = nil if params[:sources].blank?
-    params[:date_from] = nil if params[:date_from].blank?
-    params[:date_to] = nil if params[:date_to].blank?
-    session[:sources] = params[:sources] || session[:sources] || []
-    session[:date_from] = params[:date_from] || session[:date_from]
-    session[:date_to] = params[:date_to] || session[:date_to]
-    session[:histogram_detail] = params[:histogram_detail] || session[:histogram_detail]
-    redirect_to :action => type
+    redirect_to :action => type, :sources => params[:sources], :date_from => params[:date_from], :date_to => params[:date_to], :histogram_detail => params[:histogram_detail]
   end
 
   private
   def prepare_options
-    @options = AnalyzeOptions.new session
+    @options = AnalyzeOptions.new params
   end
 end

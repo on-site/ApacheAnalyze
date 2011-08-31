@@ -2,23 +2,28 @@ class AnalyzeOptions
   attr_accessor :sources, :date_from, :date_to, :histogram_count
   SHORT_TIME_FORMAT = "%H:%M:%S %m/%d/%y"
 
-  def initialize(session)
-    self.sources = (session[:sources] || Source.with_parsed.map(&:id)).map(&:to_i)
+  def initialize(params)
+    self.sources = (params[:sources] || Source.with_parsed.map(&:id)).map(&:to_i)
 
-    if session[:date_from]
-      self.date_from = DateTime.parse session[:date_from]
+    if params[:date_from].present?
+      self.date_from = DateTime.parse params[:date_from]
     else
       self.date_from = Entry.minimum :access_time
     end
 
-    if session[:date_to]
-      self.date_to = DateTime.parse session[:date_to]
+    if params[:date_to].present?
+      self.date_to = DateTime.parse params[:date_to]
     else
       self.date_to = Entry.maximum :access_time
     end
 
+    if params[:histogram_detail].present?
+      self.histogram_count = params[:histogram_detail].to_i
+    else
+      self.histogram_count = 100
+    end
+
     self.date_to = self.date_to + 1.second if self.date_to == self.date_from
-    self.histogram_count = session[:histogram_detail] || 100
   end
 
   def date_range

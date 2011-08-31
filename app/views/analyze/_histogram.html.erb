@@ -57,4 +57,8 @@
   <input type="hidden" name="visualization_type" value="<%= params[:action] %>" />
   <input type="hidden" name="date_from" />
   <input type="hidden" name="date_to" />
+  <input type="hidden" name="histogram_detail" value="<%= params[:histogram_detail] %>" />
+  <% params[:sources].each do |source| %>
+    <input type="hidden" name="sources[]" value="<%= source %>" />
+  <% end %>
 <% end %>
