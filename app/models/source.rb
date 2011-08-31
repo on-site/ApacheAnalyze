@@ -8,6 +8,19 @@ class Source < ActiveRecord::Base
   attr_accessor :non_analyzed
   validates_format_of :filename, :with => VALID_FILENAME
 
+  def recalculate_counts_if_needed!
+    if count_entries.nil? || count_parsed_entries.nil? || count_unparsed_entries.nil?
+      recalculate_counts!
+    end
+  end
+
+  def recalculate_counts!
+    self.count_entries = entries.size
+    self.count_parsed_entries = parsed_entries.size
+    self.count_unparsed_entries = unparsed_entries.size
+    save!
+  end
+
   def source_path
     if loaded?
       Rails.application.routes.url_helpers.source_path self
@@ -19,7 +32,7 @@ class Source < ActiveRecord::Base
   def example_row
     if non_analyzed
       File.open path, &:readline
-    elsif entries.size > 0
+    elsif entry_count > 0
       entries.limit(1).first.original
     end
   end
@@ -38,7 +51,8 @@ class Source < ActiveRecord::Base
 
   def entry_count
     if loaded?
-      entries.size
+      recalculate_counts_if_needed!
+      count_entries
     else
       return @_entry_count if @_entry_count
       @_entry_count = 0
@@ -53,13 +67,15 @@ class Source < ActiveRecord::Base
 
   def parsed_entry_count
     if loaded?
-      parsed_entries.size
+      recalculate_counts_if_needed!
+      count_parsed_entries
     end
   end
 
   def unparsed_entry_count
     if loaded?
-      unparsed_entries.size
+      recalculate_counts_if_needed!
+      count_unparsed_entries
     end
   end
 
@@ -116,6 +132,8 @@ class Source < ActiveRecord::Base
         inserter.create [:source_id, :original, :created_at, :updated_at], lines
       end
     end
+
+    recalculate_counts!
   end
 
   def parse!(regex, groups, options = {})
@@ -135,6 +153,8 @@ class Source < ActiveRecord::Base
         entry.parse! regex, groups, options
       end
     end
+
+    recalculate_counts!
   end
 
   def delete_file!
@@ -149,7 +169,7 @@ class Source < ActiveRecord::Base
   class << self
     def with_parsed
       all.select do |source|
-        source.parsed_entries.size > 0
+        source.parsed_entry_count > 0
       end
     end
 

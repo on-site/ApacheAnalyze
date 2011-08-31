@@ -17,6 +17,7 @@ Apacheanalyze::Application.routes.draw do
     member do
       post "parse"
       post "reparse"
+      post "recount"
     end
   end
 

@@ -15,6 +15,10 @@
   <a href="<%= analyze_path %>">analyze</a>
 </p>
 
+<div class="notice">
+  <%= flash[:notice] %>
+</div>
+
 <%= yield %>
 
 <%= script_tag_contents %>

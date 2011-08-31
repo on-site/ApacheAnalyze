@@ -1,3 +1,4 @@
 table tbody tr:nth-child(odd) { background-color: #dddddd; }
 .success { color: green; }
 .failure { color: red; font-weight: bold; }
+.notice { background-color: yellow; font-weight: bold; }
