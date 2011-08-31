@@ -1,7 +1,11 @@
+<% use_hits = @histogram.first.respond_to? :hits_id %>
 <table>
   <thead>
     <tr>
       <th><%= key_label %></th>
+      <% if use_hits %>
+        <th>Hits</th>
+      <% end %>
       <th><%= value_label %></th>
       <th></th>
     </tr>
@@ -11,6 +15,9 @@
     <% @histogram.each do |item| %>
       <tr>
         <td><%= item.key_id %></td>
+        <% if use_hits %>
+          <td><%= number_with_delimiter item.hits_id %></td>
+        <% end %>
         <td><%= number_with_delimiter item.value_id %></td>
         <td>
           <span style="width: <%= (item.value_id.to_f / @max_value) * 400.0 %>px; background-color: green; display: inline-block;">&nbsp;</span>
