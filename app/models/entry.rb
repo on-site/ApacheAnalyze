@@ -53,7 +53,7 @@ class Entry < ActiveRecord::Base
         raise "Invalid group #{group}" unless VALID_GROUPS.include? group
       end
 
-      result = { :original => line }
+      result = { :original => line, :parsed => false }
       result[:source_id] = source.id if source
       return result unless line =~ regex
 
