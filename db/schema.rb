@@ -11,7 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110831224707) do
+ActiveRecord::Schema.define(:version => 20110901203519) do
+
+  create_table "custom_queries", :force => true do |t|
+    t.string "name",  :null => false
+    t.text   "query", :null => false
+  end
 
   create_table "entries", :force => true do |t|
     t.integer  "source_id",                                            :null => false

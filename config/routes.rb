@@ -15,9 +15,15 @@ Apacheanalyze::Application.routes.draw do
 
   resources :sources do
     member do
-      post "parse"
-      post "reparse"
-      post "recount"
+      post :parse
+      post :reparse
+      post :recount
+    end
+  end
+
+  resources :custom_queries do
+    member do
+      get :run
     end
   end
 

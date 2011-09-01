@@ -1,0 +1,25 @@
+<% script :src => "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" %>
+
+<% script do %>
+  $(function() {
+    $(".expander").click(function() {
+      $(this).nextAll("div:first").slideToggle();
+      return false;
+    });
+  });
+<% end %>
+
+<% css do %>
+  .string { color: #000000; }
+  .integer { color: #aa0000; }
+  .float { color: #00aa00; }
+  .boolean { color: #0000aa; }
+  .datetime { color: #aa00aa; }
+<% end %>
+
+<div style="float: right;">
+  <h3>Table information</h3>
+  <% _table_columns :model => Entry %>
+  <br />
+  <% _table_columns :model => Source %>
+</div>

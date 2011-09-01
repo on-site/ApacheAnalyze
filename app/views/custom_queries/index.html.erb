@@ -1,0 +1,18 @@
+<p>
+  <a href="<%= new_custom_query_path %>">Create</a>
+</p>
+
+<table>
+  <tbody>
+    <% @queries.each do |query| %>
+      <tr>
+        <td>
+          <a href="<%= custom_query_path query %>"><%= query.name %></a>
+        </td>
+        <td>
+          <a href="<%= run_custom_query_path query %>">run</a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,30 @@
+<% type = type || :normal %>
+<% script :src => "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" %>
+
+<% script do %>
+  $(function() {
+    $("#edit_query,#cancel_edit_query").click(function() {
+      $("#query_form input[name='name']").val($("#original_name").val());
+      $("#query_form textarea[name='query']").val($("#original_query").val());
+      <% if type == :slide %>
+        $(".field-view").slideToggle(function() {
+          $(".field-edit").slideToggle();
+        });
+      <% else %>
+        $(".field-view").toggle();
+        $(".field-edit").toggle();
+      <% end %>
+      return false;
+    });
+
+    $("#save_and_run_query").click(function() {
+      $("#query_form input[name='save']").val("true");
+      $("#query_form input[name='run']").val("true");
+      $("#query_form").submit();
+      return false;
+    });
+  });
+<% end %>
+
+<input type="hidden" id="original_name" value="<%= @query.name %>" />
+<input type="hidden" id="original_query" value="<%= @query.query %>" />

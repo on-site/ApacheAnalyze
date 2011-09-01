@@ -1,0 +1,30 @@
+<% _editable %>
+<% _table_info %>
+
+<%= form_tag save_path, :method => save_method, :id => "query_form" do %>
+  <input type="hidden" name="save" value="true" />
+  <input type="hidden" name="run" value="false" />
+
+  <p>
+    <b>Name:</b><br />
+    <span class="field-view"><%= @query.name %></span>
+    <span class="field-edit" style="display: none;"><input type="text" name="name" size="50" value="<%= @query.name %>" /></span>
+  </p>
+
+  <p>
+    <b>Query:</b><br />
+    <pre class="field-view"><%= @query.query %></pre>
+    <span class="field-edit" style="display: none;"><textarea name="query" rows="30" cols="80"><%= @query.query %></textarea></span>
+  </p>
+
+  <span class="field-view">
+    <a href="<%= run_path %>">run</a>
+    <a id="edit_query" href="#">edit</a>
+  </span>
+
+  <span class="field-edit" style="display: none;">
+    <input type="submit" value="save" />
+    <input id="save_and_run_query" type="button" value="save &amp; run" />
+    <a id="cancel_edit_query" href="#">cancel</a>
+  </span>
+<% end %>

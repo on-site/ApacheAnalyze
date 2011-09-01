@@ -1,0 +1,15 @@
+<div>
+  <a class="expander" href="#"><%= model.table_name %></a><br />
+  <div style="display: none;">
+    <table>
+      <tbody>
+        <% model.columns.each do |column| %>
+          <tr class="<%= column.type %>">
+            <td><%= column.name %></td>
+            <td><%= column.type %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
