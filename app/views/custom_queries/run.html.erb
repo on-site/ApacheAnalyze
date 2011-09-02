@@ -9,9 +9,6 @@
 
 <div style="display: none;" class="field-edit">
   <%= form_tag save_path, :method => save_method, :id => "query_form" do %>
-    <input type="hidden" name="save" value="true" />
-    <input type="hidden" name="run" value="false" />
-
     <p>
       <b>Name:</b><br />
       <input type="text" name="name" size="50" value="<%= @query.name %>" />
@@ -22,8 +19,7 @@
       <textarea name="query" rows="30" cols="80"><%= @query.query %></textarea>
     </p>
 
-    <input type="submit" value="save" />
-    <input id="save_and_run_query" type="button" value="save &amp; run" />
+    <%= _save_and_run_buttons %>
     <a id="cancel_edit_query" href="#">cancel</a>
   <% end %>
 </div>

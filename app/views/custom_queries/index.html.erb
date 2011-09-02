@@ -1,3 +1,5 @@
+<% _prompt %>
+
 <p>
   <a href="<%= new_custom_query_path %>">Create</a>
 </p>
@@ -11,6 +13,11 @@
         </td>
         <td>
           <a href="<%= run_custom_query_path query %>">run</a>
+        </td>
+        <td>
+          <%= form_tag custom_query_path(query), :method => :delete do %>
+            <input class="prompt" type="submit" value="delete" />
+          <% end %>
         </td>
       </tr>
     <% end %>

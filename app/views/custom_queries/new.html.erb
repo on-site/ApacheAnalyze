@@ -1,27 +1,4 @@
-<% script :src => "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" %>
-
-<% script do %>
-  $(function() {
-    $("#run_query").click(function() {
-      $("#query_form input[name='run']").val("true");
-      $("#query_form input[name='save']").val("false");
-      $("#query_form").submit();
-      return false;
-    });
-
-    $("#run_and_save_query").click(function() {
-      $("#query_form input[name='run']").val("true");
-      $("#query_form input[name='save']").val("true");
-      $("#query_form").submit();
-      return false;
-    });
-  });
-<% end %>
-
 <%= form_tag custom_queries_path, :method => :post, :id => "query_form" do %>
-  <input type="hidden" name="save" value="true" />
-  <input type="hidden" name="run" value="false" />
-
   <p>
     <b>Name:</b><br />
     <input type="text" name="name" size="50" />
@@ -32,7 +9,5 @@
     <textarea name="query" rows="30" cols="80"></textarea>
   </p>
 
-  <input type="submit" value="save" />
-  <input id="run_query" type="button" value="run" />
-  <input id="run_and_save_query" type="button" value="run &amp; save" />
+  <% _save_and_run_buttons %>
 <% end %>

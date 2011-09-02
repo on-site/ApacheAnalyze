@@ -2,9 +2,6 @@
 <% _table_info %>
 
 <%= form_tag save_path, :method => save_method, :id => "query_form" do %>
-  <input type="hidden" name="save" value="true" />
-  <input type="hidden" name="run" value="false" />
-
   <p>
     <b>Name:</b><br />
     <span class="field-view"><%= @query.name %></span>
@@ -23,8 +20,7 @@
   </span>
 
   <span class="field-edit" style="display: none;">
-    <input type="submit" value="save" />
-    <input id="save_and_run_query" type="button" value="save &amp; run" />
+    <% _save_and_run_buttons %>
     <a id="cancel_edit_query" href="#">cancel</a>
   </span>
 <% end %>

@@ -1,22 +1,24 @@
 class CustomQueriesController < ApplicationController
-  before_filter :prepare_query, :only => [:run, :show]
+  before_filter :prepare_query, :only => [:run, :show, :destroy]
 
   def index
     @queries = CustomQuery.order(:name).all
   end
 
   def run
+    @query.name = params[:name] if params[:name].present?
+    @query.query = params[:query] if params[:query].present?
     @results = @query.run
   end
 
   def update
-    custom_query = CustomQuery.find params[:id]
+    @query = CustomQuery.find params[:id]
 
     save_and_run do |name, query|
-      custom_query.name = name
-      custom_query.query = query
-      custom_query.save!
-      custom_query
+      @query.name = name
+      @query.query = query
+      @query.save!
+      @query
     end
   end
 
@@ -24,6 +26,11 @@ class CustomQueriesController < ApplicationController
     save_and_run do |name, query|
       CustomQuery.create! :name => name, :query => query
     end
+  end
+
+  def destroy
+    @query.destroy
+    redirect_to custom_queries_path
   end
 
   private
@@ -45,6 +52,8 @@ class CustomQueriesController < ApplicationController
 
     if run && custom_query
       redirect_to run_custom_query_path(custom_query.id)
+    elsif run && @query
+      redirect_to run_custom_query_path(@query.id, :name => name, :query => query)
     elsif run
       redirect_to run_custom_query_path(-1, :name => name, :query => query)
     else

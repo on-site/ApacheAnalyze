@@ -1,0 +1,25 @@
+<% script :src => "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" %>
+
+<% script do %>
+  $(function() {
+    $("#run_query").click(function() {
+      $("#query_form input[name='run']").val("true");
+      $("#query_form input[name='save']").val("false");
+      $("#query_form").submit();
+      return false;
+    });
+
+    $("#save_and_run_query").click(function() {
+      $("#query_form input[name='save']").val("true");
+      $("#query_form input[name='run']").val("true");
+      $("#query_form").submit();
+      return false;
+    });
+  });
+<% end %>
+
+<input type="hidden" name="save" value="true" />
+<input type="hidden" name="run" value="false" />
+<input type="submit" value="save" />
+<input id="run_query" type="button" value="run" />
+<input id="save_and_run_query" type="button" value="save &amp; run" />
