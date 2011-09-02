@@ -8,7 +8,12 @@ class CustomQueriesController < ApplicationController
   def run
     @query.name = params[:name] if params[:name].present?
     @query.query = params[:query] if params[:query].present?
-    @results = @query.run
+
+    begin
+      @results = @query.run
+    rescue
+      @error = $!
+    end
   end
 
   def update
