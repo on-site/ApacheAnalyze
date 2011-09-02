@@ -7,6 +7,10 @@
 
 <h1><%= @query.name %></h1>
 
+<% if @results %>
+  <h2><%= @results.size %> record(s)</h2>
+<% end %>
+
 <p class="field-view">
   <a id="edit_query" href="#">edit</a>
 </p>
