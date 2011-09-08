@@ -36,7 +36,7 @@
   <% if @error %>
     There was an error running your query:
     <pre class="error"><%= @error.message %></pre>
-  <% elsif @results.present? %>
+  <% elsif @results.present? && @results.count > 0 %>
     <table>
       <thead>
         <tr>
