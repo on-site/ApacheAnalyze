@@ -1,5 +1,5 @@
-<% _parsing %>
-<% _deleting %>
+<%= render partial: "shared/parsing" %>
+<%= render partial: "shared/deleting" %>
 
 <%= form_tag sources_path, :method => :post, :multipart => true do %>
   <p>
@@ -46,7 +46,7 @@
             <% if source.loaded? %>
               <span class="success">loaded</span>
             <% else %>
-              <% _load_button :source => source %>
+              <%= render partial: "shared/load_button", locals: { source: source } %>
             <% end %>
           </td>
           <td>
@@ -59,10 +59,10 @@
             <%= number_with_delimiter format_nil(source.unparsed_entry_count) %>
           </td>
           <td>
-            <% _parse_button :source => source %>
+            <%= render partial: "shared/parse_button", locals: { source: source } %>
           </td>
           <td>
-            <% _delete_button :source => source %>
+            <%= render partial: "shared/delete_button", locals: { source: source } %>
           </td>
         </tr>
       <% end %>

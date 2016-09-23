@@ -2,7 +2,7 @@
   tag_prefix = tag_prefix || ""
   tag_suffix = tag_suffix || ""
 %>
-<% _raphael %>
+<%= render partial: "shared/raphael" %>
 
 <% script do %>
   var PAPER_WIDTH = 1000;
@@ -53,4 +53,4 @@
 
 <div id="paper"></div>
 
-<% _update_params %>
+<%= render partial: "update_params" %>

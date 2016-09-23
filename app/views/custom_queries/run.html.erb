@@ -1,5 +1,5 @@
-<% _editable :type => :slide %>
-<% _table_info %>
+<%= render partial: "editable", locals: { type: :slide } %>
+<%= render partial: "table_info" %>
 
 <% css do %>
   .error { color: red; font-weight: bold; }
@@ -27,7 +27,7 @@
       <textarea name="query" rows="30" cols="80" wrap="off"><%= @query.query %></textarea>
     </p>
 
-    <%= _save_and_run_buttons %>
+    <%= render partial: "save_and_run_buttons" %>
     <a id="cancel_edit_query" href="#">cancel</a>
   <% end %>
 </div>

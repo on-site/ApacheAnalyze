@@ -19,7 +19,7 @@
 
 <div style="float: right;">
   <h3>Table information</h3>
-  <% _table_columns :model => Entry %>
+  <%= render partial: "table_columns", locals: { model: Entry } %>
   <br />
-  <% _table_columns :model => Source %>
+  <%= render partial: "table_columns", locals: { model: Source } %>
 </div>

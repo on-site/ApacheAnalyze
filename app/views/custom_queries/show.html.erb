@@ -1,5 +1,5 @@
-<% _editable %>
-<% _table_info %>
+<%= render partial: "editable" %>
+<%= render partial: "table_info" %>
 
 <%= form_tag save_path, :method => save_method, :id => "query_form" do %>
   <p>
@@ -20,7 +20,7 @@
   </span>
 
   <span class="field-edit" style="display: none;">
-    <% _save_and_run_buttons %>
+    <%= render partial: "save_and_run_buttons" %>
     <a id="cancel_edit_query" href="#">cancel</a>
   </span>
 <% end %>

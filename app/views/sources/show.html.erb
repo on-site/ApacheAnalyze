@@ -1,12 +1,12 @@
-<% _parsing %>
-<% _deleting %>
+<%= render partial: "shared/parsing" %>
+<%= render partial: "shared/deleting" %>
 
 <p>
   <b>Actions:</b>
-  <% _parse_button :source => @source %>
-  <% _load_button :source => @source %>
-  <% _delete_button :source => @source %>
-  <% _recount_button :source => @source %>
+  <%= render partial: "shared/parse_button", locals: { source: @source } %>
+  <%= render partial: "shared/load_button", locals: { source: @source } %>
+  <%= render partial: "shared/delete_button", locals: { source: @source } %>
+  <%= render partial: "shared/recount_button", locals: { source: @source } %>
 </p>
 
 <p>
@@ -32,10 +32,10 @@
 
 <p>
   <b>10 Example Parsed Entries:</b><br />
-  <% _entries :values => @source.parsed_examples %>
+  <%= render partial: "shared/entries", locals: { values: @source.parsed_examples } %>
 </p>
 
 <p>
   <b>10 Example Unparsed Entries:</b><br />
-  <% _entries :values => @source.unparsed_examples %>
+  <%= render partial: "shared/entries", locals: { values: @source.unparsed_examples } %>
 </p>
