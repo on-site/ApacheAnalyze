@@ -1,10 +1,10 @@
 class Source < ActiveRecord::Base
   SOURCE_DIR = File.join Rails.root, "analyze"
-  VALID_FILENAME = /^[-_.a-zA-Z0-9]+$/
+  VALID_FILENAME = /\A[-_.a-zA-Z0-9]+\z/
 
   has_many :entries
-  has_many :parsed_entries, class_name: "Entry", conditions: { parsed: true }
-  has_many :unparsed_entries, class_name: "Entry", conditions: { parsed: false }
+  has_many :parsed_entries, -> { where(parsed: true) }, class_name: "Entry"
+  has_many :unparsed_entries, -> { where(parsed: false) }, class_name: "Entry"
   attr_accessor :non_analyzed
   validates_format_of :filename, with: VALID_FILENAME
 
@@ -175,7 +175,7 @@ class Source < ActiveRecord::Base
 
     def upload!(file)
       filename = file.original_filename
-      filename.gsub! /^.*(\\|\/)/, ""
+      filename.gsub! /\A.*(\\|\/)/, ""
       raise "Invalid filename #{filename}" if filename == "." || filename == ".."
       raise "Invalid filename #{filename}" unless filename =~ VALID_FILENAME
       path = File.join SOURCE_DIR, filename

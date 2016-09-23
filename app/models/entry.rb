@@ -39,7 +39,7 @@ class Entry < ActiveRecord::Base
 
     def request_histogram(options)
       options.date_ranges.map do |range|
-        count conditions: { source_id: options.sources, parsed: true, access_time: range }
+        where(source_id: options.sources, parsed: true, access_time: range).count
       end
     end
 
