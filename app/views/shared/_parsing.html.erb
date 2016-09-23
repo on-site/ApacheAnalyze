@@ -1,6 +1,6 @@
-<% css :src => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" %>
-<% script :src => "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" %>
-<% script :src => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" %>
+<% css src: "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" %>
+<% script src: "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" %>
+<% script src: "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" %>
 
 <% script do %>
   $(function() {
@@ -48,7 +48,7 @@
 <input type="hidden" id="load_and_parse_path" value="<%= sources_path %>" />
 
 <div id="parse_dialog" style="display: none;">
-  <%= form_tag "/error", :method => :post do %>
+  <%= form_tag "/error", method: :post do %>
     <input type="hidden" name="filename" />
 
     <p id="parse_option">

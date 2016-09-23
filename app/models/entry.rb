@@ -27,36 +27,36 @@ class Entry < ActiveRecord::Base
   class << self
     def average_duration_histogram(options)
       options.date_ranges.map do |range|
-        Entry.where(:source_id => options.sources, :parsed => true, :access_time => range).average(:duration) || 0
+        Entry.where(source_id: options.sources, parsed: true, access_time: range).average(:duration) || 0
       end
     end
 
     def max_duration_histogram(options)
       options.date_ranges.map do |range|
-        Entry.where(:source_id => options.sources, :parsed => true, :access_time => range).maximum(:duration) || 0
+        Entry.where(source_id: options.sources, parsed: true, access_time: range).maximum(:duration) || 0
       end
     end
 
     def request_histogram(options)
       options.date_ranges.map do |range|
-        count :conditions => { :source_id => options.sources, :parsed => true, :access_time => range }
+        count conditions: { source_id: options.sources, parsed: true, access_time: range }
       end
     end
 
     def url_average_duration_histogram(options)
-      select(["http_url AS key_id", "avg(duration) AS value_id", "count(*) AS hits_id"]).where(:source_id => options.sources, :parsed => true, :access_time => options.date_range).group(:http_url).order("value_id DESC").limit(options.histogram_count)
+      select(["http_url AS key_id", "avg(duration) AS value_id", "count(*) AS hits_id"]).where(source_id: options.sources, parsed: true, access_time: options.date_range).group(:http_url).order("value_id DESC").limit(options.histogram_count)
     end
 
     def url_max_duration_histogram(options)
-      select(["http_url AS key_id", "max(duration) AS value_id", "count(*) AS hits_id"]).where(:source_id => options.sources, :parsed => true, :access_time => options.date_range).group(:http_url).order("value_id DESC").limit(options.histogram_count)
+      select(["http_url AS key_id", "max(duration) AS value_id", "count(*) AS hits_id"]).where(source_id: options.sources, parsed: true, access_time: options.date_range).group(:http_url).order("value_id DESC").limit(options.histogram_count)
     end
 
     def url_total_duration_histogram(options)
-      select(["http_url AS key_id", "sum(duration) AS value_id", "count(*) AS hits_id"]).where(:source_id => options.sources, :parsed => true, :access_time => options.date_range).group(:http_url).order("value_id DESC").limit(options.histogram_count)
+      select(["http_url AS key_id", "sum(duration) AS value_id", "count(*) AS hits_id"]).where(source_id: options.sources, parsed: true, access_time: options.date_range).group(:http_url).order("value_id DESC").limit(options.histogram_count)
     end
 
     def url_histogram(options)
-      select(["http_url AS key_id", "count(*) AS value_id"]).where(:source_id => options.sources, :parsed => true, :access_time => options.date_range).group(:http_url).order("value_id DESC").limit(options.histogram_count)
+      select(["http_url AS key_id", "count(*) AS value_id"]).where(source_id: options.sources, parsed: true, access_time: options.date_range).group(:http_url).order("value_id DESC").limit(options.histogram_count)
     end
 
     def parse!(source, line, regex, groups)
@@ -65,7 +65,7 @@ class Entry < ActiveRecord::Base
         raise "Invalid group #{group}" unless VALID_GROUPS.include? group
       end
 
-      result = { :original => line, :parsed => false }
+      result = { original: line, parsed: false }
       result[:source_id] = source.id if source
       return result unless line =~ regex
 

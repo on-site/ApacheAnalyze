@@ -1,7 +1,7 @@
 <%= render partial: "editable" %>
 <%= render partial: "table_info" %>
 
-<%= form_tag save_path, :method => save_method, :id => "query_form" do %>
+<%= form_tag save_path, method: save_method, id: "query_form" do %>
   <p>
     <b>Name:</b><br />
     <span class="field-view"><%= @query.name %></span>

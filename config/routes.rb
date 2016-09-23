@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     end
   end
 
-  root :to => "sources#index", :via => :get
+  root to: "sources#index", via: :get
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

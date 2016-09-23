@@ -41,7 +41,7 @@ class SourcesController < ApplicationController
   end
 
   def reparse
-    Source.find(params[:id]).parse! params[:regex], params[:groups], :force => true
+    Source.find(params[:id]).parse! params[:regex], params[:groups], force: true
     flash[:notice] = "Finished reparsing"
     redirect_to sources_path
   end

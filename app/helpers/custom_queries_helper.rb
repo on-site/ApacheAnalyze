@@ -17,7 +17,7 @@ module CustomQueriesHelper
 
   def run_path
     if new?
-      run_custom_query_path -1, :name => @query.name, :query => @query.query
+      run_custom_query_path -1, name: @query.name, query: @query.query
     else
       run_custom_query_path @query
     end

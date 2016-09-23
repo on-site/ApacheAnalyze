@@ -1,6 +1,6 @@
-<% css :src => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" %>
-<% script :src => "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" %>
-<% script :src => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" %>
+<% css src: "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" %>
+<% script src: "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" %>
+<% script src: "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" %>
 
 <% script do %>
   $(function() {
@@ -20,7 +20,7 @@
 <input type="hidden" id="delete_source_path" value="<%= source_path "SOURCE_ID_HERE" %>" />
 
 <div id="delete_dialog" style="display: none;">
-  <%= form_tag "/error", :method => :delete do %>
+  <%= form_tag "/error", method: :delete do %>
     <b>Delete <span id="delete_filename"></span></b>
 
     <p>

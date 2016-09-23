@@ -3,10 +3,10 @@ class Source < ActiveRecord::Base
   VALID_FILENAME = /^[-_.a-zA-Z0-9]+$/
 
   has_many :entries
-  has_many :parsed_entries, :class_name => "Entry", :conditions => { :parsed => true }
-  has_many :unparsed_entries, :class_name => "Entry", :conditions => { :parsed => false }
+  has_many :parsed_entries, class_name: "Entry", conditions: { parsed: true }
+  has_many :unparsed_entries, class_name: "Entry", conditions: { parsed: false }
   attr_accessor :non_analyzed
-  validates_format_of :filename, :with => VALID_FILENAME
+  validates_format_of :filename, with: VALID_FILENAME
 
   def recalculate_counts_if_needed!
     if count_entries.nil? || count_parsed_entries.nil? || count_unparsed_entries.nil?
@@ -143,9 +143,9 @@ class Source < ActiveRecord::Base
     groups = groups.split(",").map(&:strip).map(&:to_sym)
 
     if options[:force]
-      conditions = { :source_id => id }
+      conditions = { source_id: id }
     else
-      conditions = { :source_id => id, :parsed => false }
+      conditions = { source_id: id, parsed: false }
     end
 
     Entry.where(conditions).find_in_batches do |values|
@@ -162,7 +162,7 @@ class Source < ActiveRecord::Base
   end
 
   def drop_data!
-    Entry.delete_all :source_id => id
+    Entry.delete_all source_id: id
     destroy
   end
 
@@ -193,9 +193,9 @@ class Source < ActiveRecord::Base
 
     def load!(filename, options = {})
       raise "filename '#{filename}' is not valid!" unless valid_filename? filename
-      existing = Source.where(:filename => filename).first
+      existing = Source.where(filename: filename).first
       raise "That source has already been loaded..." if existing
-      source = Source.create! :filename => filename
+      source = Source.create! filename: filename
       source.load! options
       source
     end
@@ -239,14 +239,14 @@ class Source < ActiveRecord::Base
 
     def files
       raw_files.map do |file|
-        Source.new :filename => file
+        Source.new filename: file
       end
     end
 
     def from_file(id, filename)
       if id == -1
         raise "filename '#{filename}' is not valid!" unless valid_filename? filename
-        result = Source.new :filename => filename
+        result = Source.new filename: filename
         result.non_analyzed = true
         result
       else

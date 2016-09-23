@@ -1,17 +1,17 @@
 class AnalyzeController < ApplicationController
   VALID_TYPE_VALUES = {
-    :average_duration_histogram => "Average Duration Histogram",
-    :max_duration_histogram => "Max Duration Histogram",
-    :request_histogram => "Request Histogram",
-    :url_average_duration_histogram => "URL Average Duration Histogram",
-    :url_max_duration_histogram => "URL Max Duration Histogram",
-    :url_total_duration_histogram => "URL Total Duration Histogram",
-    :url_histogram => "URL Histogram"
+    average_duration_histogram: "Average Duration Histogram",
+    max_duration_histogram: "Max Duration Histogram",
+    request_histogram: "Request Histogram",
+    url_average_duration_histogram: "URL Average Duration Histogram",
+    url_max_duration_histogram: "URL Max Duration Histogram",
+    url_total_duration_histogram: "URL Total Duration Histogram",
+    url_histogram: "URL Histogram"
   }
   VALID_TYPES = VALID_TYPE_VALUES.keys
 
-  before_filter :prepare_options, :only => VALID_TYPES
-  before_filter :prepare_sources, :except => [:load]
+  before_filter :prepare_options, only: VALID_TYPES
+  before_filter :prepare_sources, except: [:load]
 
   def index
     @min_access_time = Entry.minimum(:access_time)
@@ -53,7 +53,7 @@ class AnalyzeController < ApplicationController
   def load
     type = params[:visualization_type].to_sym
     raise "Invalid type #{type}" unless VALID_TYPES.include? type
-    redirect_to :action => type, :sources => params[:sources], :date_from => params[:date_from], :date_to => params[:date_to], :histogram_detail => params[:histogram_detail]
+    redirect_to action: type, sources: params[:sources], date_from: params[:date_from], date_to: params[:date_to], histogram_detail: params[:histogram_detail]
   end
 
   private

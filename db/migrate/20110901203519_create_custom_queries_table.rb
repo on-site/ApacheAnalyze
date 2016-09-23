@@ -1,8 +1,8 @@
 class CreateCustomQueriesTable < ActiveRecord::Migration
   def self.up
     create_table :custom_queries do |t|
-      t.string :name, :null => false
-      t.text :query, :null => false
+      t.string :name, null: false
+      t.text :query, null: false
     end
   end
 
