@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Apacheanalyze::Application.config.secret_token = 'faf6aa980d641daa3bde725acc14149a8330c43cd6979332e18dc72931bbe4a29802846aadbbe9d5eeaf66a048f08ce162d0b6997fcc49ccdde22ad778e87d6e'
+Apacheanalyze::Application.config.secret_token = '5e155f76b9905bb481d54b92a461563639580dbba103579862ed70bbe1233e2eaecda732f7c63a2131459d54e1188822c8183311ee383525a5d25a852236fbed'
